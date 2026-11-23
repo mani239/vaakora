@@ -1,0 +1,44 @@
+# Secrets & local environment
+.env
+.env.*
+!.env.example
+
+# Runtime databases & Python caches
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+node_modules/
+
+# Large archives, research clones & generated graph caches
+Zoho WorkDrive.zip
+*.zip
+*.rar
+graphify-out/
+rea/
+voice-research/
+.agents/
+.graphifyignore
+
+# Legacy scratch, patch scripts & local docs
+scratch/
+scratch_*.py
+patch_*.py
+find_speaker.py
+list_gemini_models.py
+test_sarvam.py
+*.pdf
+
+# Legacy unused Sarvam/Telugu preview caches (current runtime uses hero + personas/*.wav)
+simulator/static/previews/canned/
+simulator/static/previews/amit.*
+simulator/static/previews/gokul.*
+simulator/static/previews/kavitha.*
+simulator/static/previews/simran.*

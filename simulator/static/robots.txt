@@ -1,0 +1,115 @@
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: Googlebot
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: Applebot
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: GPTBot
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: Google-CloudVertexBot
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: DuckAssistBot
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: meta-externalagent
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: Bytespider
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+User-agent: *
+Allow: /
+Disallow: /app
+Disallow: /api/
+Disallow: /ws/
+
+Sitemap: https://vaakora.in/sitemap.xml

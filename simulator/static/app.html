@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="en" data-surface="obsidian">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Console | Vaakora</title>
+  <meta name="description" content="Vaakora operator console for managing SIM/SIP trunks, voice agents, lead queues, call logs, and live browser testing." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@100..112.5,400..600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/callingout-tokens.css" />
+  <link rel="stylesheet" href="/static/css/callingout-console.css" />
+  <script src="/static/outpero-client.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#consoleMain">Skip to console content</a>
+  <div id="toastContainer" class="toast-stack" aria-live="polite"></div>
+
+  <div id="appShell" class="app-shell">
+    <!-- Persistent Desktop Sidebar (§8.1: 232px wide, collapsible to 64px rail) -->
+    <aside id="appSidebar" class="app-sidebar" aria-label="Console navigation">
+      <div>
+        <div class="sidebar-head">
+          <a class="sidebar-brand" href="/">
+            <img src="/static/brand/logo-mark-light.svg" alt="" width="24" height="24" />
+            <span class="sidebar-brand-text">Vaakora</span>
+          </a>
+          <button type="button" id="sidebarCollapseBtn" class="c-btn c-btn--ghost" style="min-height: 36px; padding: 0 8px;" aria-expanded="true" aria-label="Collapse sidebar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Workspace sections">
+          <button type="button" onclick="switchTab('overview')" id="tab-overview" class="sidebar-btn is-active" aria-current="page">
+            <span class="sidebar-btn__left">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+              <span class="sidebar-label">Overview</span>
+            </span>
+          </button>
+          <button type="button" onclick="switchTab('calls')" id="tab-calls" class="sidebar-btn">
+            <span class="sidebar-btn__left">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <span class="sidebar-label">Call logs</span>
+            </span>
+            <span id="callCountBadge" class="sidebar-count sidebar-label">0</span>
+          </button>
+          <button type="button" onclick="switchTab('campaigns')" id="tab-campaigns" class="sidebar-btn">
+            <span class="sidebar-btn__left">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span class="sidebar-label">Leads &amp; campaigns</span>
+            </span>
+            <span id="leadCountBadge" class="sidebar-count sidebar-label">0</span>
+          </button>
+          <button type="button" onclick="switchTab('employees')" id="tab-employees" class="sidebar-btn">
+            <span class="sidebar-btn__left">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+              <span class="sidebar-label">Agents &amp; voices</span>
+            </span>
+          </button>
+
+          <div class="sidebar-group-sep" aria-hidden="true"></div>
+
+          <button type="button" onclick="switchTab('sims')" id="tab-sims" class="sidebar-btn">
+            <span class="sidebar-btn__left">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></svg>
+              <span class="sidebar-label">Numbers &amp; trunks</span>
+            </span>
+            <span id="simCountBadge" class="sidebar-count sidebar-label">0</span>
+          </button>
+          <button type="button" onclick="switchTab('sandbox')" id="tab-sandbox" class="sidebar-btn">
+            <span class="sidebar-btn__left">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+              <span class="sidebar-label">Live sandbox</span>
+            </span>
+          </button>
+
+          <div class="sidebar-group-sep" aria-hidden="true"></div>
+
+          <a href="/demo" class="sidebar-btn">
+            <span class="sidebar-btn__left">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              <span class="sidebar-label">Public demo</span>
+            </span>
+          </a>
+          <a href="/trust" class="sidebar-btn">
+            <span class="sidebar-btn__left">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span class="sidebar-label">Trust &amp; DLT</span>
+            </span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="sidebar-foot-box">
+        <div style="font-weight: 600; color: var(--fg);">Starter billing pulse</div>
+        <div class="mono-metric" style="margin-top: 4px; color: var(--fg-2);">Rs 5.00/min (6s)</div>
+      </div>
+    </aside>
+
+    <!-- Mobile Navigation Sheet -->
+    <div id="mobileSidebarBackdrop" class="mobile-drawer-backdrop" hidden>
+      <div class="mobile-drawer-panel" role="dialog" aria-modal="true" aria-label="Console navigation">
+        <div>
+          <div class="sidebar-head">
+            <a class="sidebar-brand" href="/"><img src="/static/brand/logo-mark-light.svg" alt="" width="24" height="24" /><span>Vaakora</span></a>
+            <button type="button" id="closeMobileDrawerBtn" class="c-btn">Close</button>
+          </div>
+          <nav class="sidebar-nav" aria-label="Mobile console links">
+            <button type="button" onclick="switchTab('overview'); closeMobileSidebar();" class="sidebar-btn"><span class="sidebar-btn__left">Overview</span></button>
+            <button type="button" onclick="switchTab('calls'); closeMobileSidebar();" class="sidebar-btn"><span class="sidebar-btn__left">Call logs</span></button>
+            <button type="button" onclick="switchTab('campaigns'); closeMobileSidebar();" class="sidebar-btn"><span class="sidebar-btn__left">Leads &amp; campaigns</span></button>
+            <button type="button" onclick="switchTab('employees'); closeMobileSidebar();" class="sidebar-btn"><span class="sidebar-btn__left">Agents &amp; voices</span></button>
+            <button type="button" onclick="switchTab('sims'); closeMobileSidebar();" class="sidebar-btn"><span class="sidebar-btn__left">Numbers &amp; trunks</span></button>
+            <button type="button" onclick="switchTab('sandbox'); closeMobileSidebar();" class="sidebar-btn"><span class="sidebar-btn__left">Live sandbox</span></button>
+            <a href="/" class="sidebar-btn"><span class="sidebar-btn__left">Website</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-main-wrap">
+      <!-- Top Bar (§8.1: workspace switcher, engine health popover, wallet credits, Ctrl+K) -->
+      <header class="app-topbar">
+        <div class="app-topbar__left">
+          <button type="button" id="openMobileDrawerBtn" class="c-btn mobile-sidebar-btn" aria-label="Open menu">Menu</button>
+          <button type="button" onclick="openBusinessModal()" class="c-btn" title="Edit workspace details">
+            <span id="navWorkspaceName">Pontis LLP Workspace</span>
+            <span style="font-size: 0.75rem; color: var(--fg-3);">Edit</span>
+          </button>
+        </div>
+
+        <div class="app-topbar__right">
+          <button type="button" id="cmdPaletteBtn" onclick="openCommandPalette()" class="c-btn" title="Jump to any view, lead, or call">
+            <span>Search</span>
+            <span class="mono-metric" style="color: var(--fg-3); font-size: 0.75rem;">Ctrl+K</span>
+          </button>
+
+          <div class="popover-wrap">
+            <button type="button" id="engineHealthBtn" onclick="toggleEngineHealthPopover()" class="c-btn" aria-expanded="false" aria-controls="engineHealthPopover">
+              <span id="engineHealthDot" class="status-dot status-dot--live"></span>
+              <span id="engineHealthLabel">Engine OK</span>
+            </button>
+            <div id="engineHealthPopover" class="popover-card" role="region" aria-label="Provider health" hidden>
+              <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 10px;">Active voice providers</div>
+              <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.8125rem; color: var(--fg-2);">
+                <div style="display: flex; justify-content: space-between;"><span>VAD</span><span id="healthVad" class="mono-metric">silero</span></div>
+                <div style="display: flex; justify-content: space-between;"><span>STT</span><span id="healthStt" class="mono-metric">deepgram-nova-3</span></div>
+                <div style="display: flex; justify-content: space-between;"><span>LLM</span><span id="healthLlm" class="mono-metric">groq</span></div>
+                <div style="display: flex; justify-content: space-between;"><span>TTS</span><span id="healthTts" class="mono-metric">checking...</span></div>
+              </div>
+              <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--rule); font-size: 0.75rem; color: var(--fg-3);" id="healthReasonNote"></div>
+            </div>
+          </div>
+
+          <button type="button" onclick="openRechargeModal()" class="c-btn" title="Add credits">
+            <span>Credits</span>
+            <span id="walletBalance" class="mono-metric" style="color: var(--live);">&#8377;50.00</span>
+            <span style="color: var(--accent-text); font-weight: 600;">Add</span>
+          </button>
+        </div>
+      </header>
+
+      <main id="consoleMain" class="app-content">
+        <!-- VIEW 1: OVERVIEW -->
+        <section id="view-overview" class="view-panel view-panel--overview">
+          <div class="c-panel" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;">
+            <div>
+              <h1 style="margin: 0; font-size: 1.375rem; font-weight: 600;">Operator control room</h1>
+              <p style="margin: 4px 0 0; font-size: 0.875rem; color: var(--fg-2);">
+                Connect telephony trunks, edit agent playbooks, test live in the sandbox, and audit every completed call.
+              </p>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <button type="button" onclick="openAddSimModal()" class="c-btn c-btn--primary">Connect SIM / trunk</button>
+              <button type="button" onclick="switchTab('sandbox')" class="c-btn">Test in sandbox</button>
+            </div>
+          </div>
+
+          <!-- Real Metrics Grid (No fabricated constants) -->
+          <div class="metrics-grid">
+            <div class="c-panel">
+              <div style="font-size: 0.75rem; color: var(--fg-3); font-weight: 500;">Connected trunks</div>
+              <div id="metricSims" class="mono-metric" style="font-size: 1.5rem; margin-top: 8px;">0 active</div>
+              <div id="metricSimsNote" style="font-size: 0.75rem; color: var(--fg-3); margin-top: 6px;">Loading trunks...</div>
+            </div>
+            <div class="c-panel">
+              <div style="font-size: 0.75rem; color: var(--fg-3); font-weight: 500;">Total logged calls</div>
+              <div id="metricCalls" class="mono-metric" style="font-size: 1.5rem; margin-top: 8px;">0 calls</div>
+              <div id="metricAvgDur" style="font-size: 0.75rem; color: var(--fg-3); margin-top: 6px;">Average duration: N/A</div>
+            </div>
+            <div class="c-panel">
+              <div style="font-size: 0.75rem; color: var(--fg-3); font-weight: 500;">Qualified HOT / WARM leads</div>
+              <div id="metricQualified" class="mono-metric" style="font-size: 1.5rem; margin-top: 8px; color: var(--live);">0 qualified</div>
+              <div id="metricLeadsTotal" style="font-size: 0.75rem; color: var(--fg-3); margin-top: 6px;">Loading lead queue...</div>
+            </div>
+            <div class="c-panel">
+              <div style="font-size: 0.75rem; color: var(--fg-3); font-weight: 500;">Wallet balance</div>
+              <div id="metricWalletPill" class="mono-metric" style="font-size: 1.5rem; margin-top: 8px;">&#8377;50.00</div>
+              <div style="font-size: 0.75rem; color: var(--fg-3); margin-top: 6px;">Starter rate: &#8377;5.00/min (6s pulse)</div>
+            </div>
+          </div>
+
+          <!-- Interactive 4-Step Checklist (Real native buttons) -->
+          <div class="c-panel">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 12px;">
+              <h2 style="margin: 0; font-size: 1rem; font-weight: 600;">Workspace readiness</h2>
+              <span id="onboardingProgressBadge" class="state-badge">Checking setup...</span>
+            </div>
+            <div class="metrics-grid">
+              <button type="button" onclick="switchTab('sims')" class="c-panel--subtle" style="text-align: left; display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 0.75rem; color: var(--accent-text); font-weight: 600;">1. Numbers &amp; trunks</span>
+                <span style="font-size: 0.875rem; font-weight: 600; color: var(--fg);">Verify outbound line</span>
+                <span id="stepSimSub" style="font-size: 0.75rem; color: var(--fg-3);">Check trunk status</span>
+              </button>
+              <button type="button" onclick="openBusinessModal()" class="c-panel--subtle" style="text-align: left; display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 0.75rem; color: var(--accent-text); font-weight: 600;">2. Business profile</span>
+                <span style="font-size: 0.875rem; font-weight: 600; color: var(--fg);">Pitch &amp; company info</span>
+                <span id="stepBizSub" style="font-size: 0.75rem; color: var(--fg-3);">Update knowledge base</span>
+              </button>
+              <button type="button" onclick="switchTab('employees')" class="c-panel--subtle" style="text-align: left; display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 0.75rem; color: var(--accent-text); font-weight: 600;">3. Agent voice</span>
+                <span style="font-size: 0.875rem; font-weight: 600; color: var(--fg);">Persona &amp; disclosure</span>
+                <span id="stepVoiceSub" style="font-size: 0.75rem; color: var(--fg-3);">Select Indian English voice</span>
+              </button>
+              <button type="button" onclick="switchTab('campaigns')" class="c-panel--subtle" style="text-align: left; display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 0.75rem; color: var(--accent-text); font-weight: 600;">4. Leads &amp; dialing</span>
+                <span style="font-size: 0.875rem; font-weight: 600; color: var(--fg);">Import CSV or dial</span>
+                <span id="stepLeadSub" style="font-size: 0.75rem; color: var(--fg-3);">Manage lead queue</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Business Profile Summary -->
+          <div class="c-panel">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--rule); gap: 12px;">
+              <div>
+                <h2 style="margin: 0; font-size: 1rem; font-weight: 600;">Active business context</h2>
+                <p style="margin: 2px 0 0; font-size: 0.8125rem; color: var(--fg-3);">Injected into custom voice agent system instructions.</p>
+              </div>
+              <button type="button" onclick="openBusinessModal()" class="c-btn">Edit profile</button>
+            </div>
+            <div class="console-2col" style="margin-top: 14px;">
+              <div class="c-panel--subtle">
+                <div style="font-size: 0.75rem; color: var(--fg-3);">Organization</div>
+                <div id="overviewBizName" style="font-weight: 600; margin-top: 4px;">Pontis LLP</div>
+                <div id="overviewBizIndustry" style="font-size: 0.8125rem; color: var(--accent-text); margin-top: 2px;">Multimedia &amp; AI Localization</div>
+                <div id="overviewBizWeb" class="mono-metric" style="font-size: 0.75rem; color: var(--fg-3); margin-top: 4px;">https://pontis.in</div>
+              </div>
+              <div class="c-panel--subtle">
+                <div style="font-size: 0.75rem; color: var(--fg-3);">Value proposition</div>
+                <p id="overviewBizDesc" style="margin: 4px 0 0; font-size: 0.875rem; color: var(--fg-2); line-height: 1.5;"></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 2: SIMs & TELECOM TRUNKS -->
+        <section id="view-sims" class="view-panel" hidden>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;">
+            <div>
+              <h1 style="margin: 0; font-size: 1.375rem; font-weight: 600;">Numbers &amp; telecom trunks</h1>
+              <p style="margin: 4px 0 0; font-size: 0.8125rem; color: var(--fg-2);">Connect GoIP GSM SIM gateways, Exotel Indian DIDs, or Vobiz/Plivo SIP trunks.</p>
+            </div>
+            <button type="button" onclick="openAddSimModal()" class="c-btn c-btn--primary">Add SIM / trunk</button>
+          </div>
+
+          <div id="simListContainer" class="console-2col">
+            <div class="c-panel">Loading connected trunks...</div>
+          </div>
+        </section>
+
+        <!-- VIEW 3: VOICE AGENTS & CLONING -->
+        <section id="view-employees" class="view-panel" hidden>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;">
+            <div>
+              <h1 style="margin: 0; font-size: 1.375rem; font-weight: 600;">Agents &amp; voice personas</h1>
+              <p style="margin: 4px 0 0; font-size: 0.8125rem; color: var(--fg-2);">Edit your agent identity, greeting disclosure, and audition Indian English voices.</p>
+            </div>
+            <button type="button" onclick="saveEmployeeConfig(false)" class="c-btn c-btn--primary">Save agent</button>
+          </div>
+
+          <div class="console-2col">
+            <div class="c-panel" style="display: flex; flex-direction: column; gap: 12px;">
+              <h2 style="margin: 0; font-size: 1rem; font-weight: 600;">Identity &amp; playbook</h2>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                  <label class="c-label" for="agentNameInput">Agent name</label>
+                  <input id="agentNameInput" type="text" class="c-input" value="Aria" />
+                </div>
+                <div>
+                  <label class="c-label" for="agentRoleInput">Role title</label>
+                  <input id="agentRoleInput" type="text" class="c-input" value="Outbound Sales Executive" />
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                  <label class="c-label" for="agentVoiceSelect">Assigned voice</label>
+                  <select id="agentVoiceSelect" onchange="syncVoiceSelection(this.value, 'employees')" class="c-select"></select>
+                </div>
+                <div>
+                  <label class="c-label" for="agentLangSelect">Pipeline language</label>
+                  <select id="agentLangSelect" class="c-select">
+                    <option value="en-IN" selected>Indian English (en-IN)</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <label class="c-label" for="employeeGenrePresetSelect" style="margin: 0;">Scenario preset</label>
+                  <button type="button" onclick="applyGenreToEmployeeForm()" class="c-btn c-btn--ghost" style="min-height: 28px; padding: 0 8px; font-size: 0.75rem; color: var(--accent-text);">Load preset into editor</button>
+                </div>
+                <select id="employeeGenrePresetSelect" class="c-select"></select>
+              </div>
+              <div>
+                <label class="c-label" for="agentFirstSentence">Opening line (includes AI disclosure)</label>
+                <textarea id="agentFirstSentence" rows="2" class="c-textarea"></textarea>
+              </div>
+              <div>
+                <label class="c-label" for="agentKnowledgeBase">Business knowledge</label>
+                <textarea id="agentKnowledgeBase" rows="3" class="c-textarea"></textarea>
+              </div>
+              <div>
+                <label class="c-label" for="agentCustomRules">Guardrails &amp; rules</label>
+                <textarea id="agentCustomRules" rows="2" class="c-textarea"></textarea>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div class="c-panel">
+                <h2 style="margin: 0 0 12px; font-size: 1rem; font-weight: 600;">Audition voices</h2>
+                <div id="voiceCardsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px;">
+                  <div class="c-panel--subtle">Loading voices...</div>
+                </div>
+              </div>
+
+              <div class="c-panel" style="display: flex; flex-direction: column; gap: 10px;">
+                <h2 style="margin: 0; font-size: 1rem; font-weight: 600;">Custom voice cloning (requires Cartesia active credits)</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                  <div>
+                    <label class="c-label" for="cloneVoiceName">Cloned voice name</label>
+                    <input id="cloneVoiceName" type="text" class="c-input" placeholder="e.g. Studio Host UK" />
+                  </div>
+                  <div>
+                    <label class="c-label" for="cloneVoiceAccent">Accent label</label>
+                    <select id="cloneVoiceAccent" class="c-select">
+                      <option value="en-IN">Indian English (en-IN)</option>
+                      <option value="en-GB" selected>British English (en-GB)</option>
+                      <option value="en-US">US English (en-US)</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                  <div>
+                    <label class="c-label" for="cloneVoiceGender">Speaker gender</label>
+                    <select id="cloneVoiceGender" class="c-select">
+                      <option value="female">Female</option>
+                      <option value="male">Male</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="c-label" for="cloneVoiceFile">WAV/MP3 clip (10 to 60s)</label>
+                    <input id="cloneVoiceFile" type="file" accept=".wav,.mp3,audio/*" class="c-input" style="padding-top: 7px;" />
+                  </div>
+                </div>
+                <label for="cloneVoiceConsent" style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.8125rem; color: var(--fg-2);">
+                  <input id="cloneVoiceConsent" type="checkbox" style="margin-top: 3px;" />
+                  <span>I have written permission from the speaker to clone this voice.</span>
+                </label>
+                <div>
+                  <button type="button" id="cloneVoiceBtn" onclick="submitVoiceClone()" class="c-btn">Clone voice</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 4: LEADS & CAMPAIGNS -->
+        <section id="view-campaigns" class="view-panel" hidden>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;">
+            <div>
+              <h1 style="margin: 0; font-size: 1.375rem; font-weight: 600;">Leads &amp; outbound queue</h1>
+              <p style="margin: 4px 0 0; font-size: 0.8125rem; color: var(--fg-2);">Filter contacts, import CSVs, trigger simulated trunk dials, or open a lead directly in the browser sandbox.</p>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <button type="button" onclick="openAddLeadModal()" class="c-btn">Add lead</button>
+              <button type="button" onclick="openCsvModal()" class="c-btn">Import CSV</button>
+              <button type="button" onclick="batchDialAllLeads()" class="c-btn c-btn--primary">Batch dial queue</button>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;" role="group" aria-label="Filter leads by status">
+            <button type="button" onclick="filterLeads('all')" id="filter-all" class="c-btn c-btn--primary" aria-pressed="true">All</button>
+            <button type="button" onclick="filterLeads('new')" id="filter-new" class="c-btn" aria-pressed="false">New</button>
+            <button type="button" onclick="filterLeads('qualified_hot')" id="filter-qualified_hot" class="c-btn" aria-pressed="false">Qualified HOT</button>
+            <button type="button" onclick="filterLeads('qualified_warm')" id="filter-qualified_warm" class="c-btn" aria-pressed="false">Qualified WARM</button>
+          </div>
+
+          <div class="c-table-wrap">
+            <table class="c-table c-table-responsive">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Company</th>
+                  <th>Industry</th>
+                  <th>Status</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="leadsTableBody">
+                <tr><td colspan="6" style="padding: 20px; text-align: center; color: var(--fg-3);">Loading leads...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- VIEW 5: CALL LOGS -->
+        <section id="view-calls" class="view-panel" hidden>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;">
+            <div>
+              <h1 style="margin: 0; font-size: 1.375rem; font-weight: 600;">Call logs &amp; transcripts</h1>
+              <p style="margin: 4px 0 0; font-size: 0.8125rem; color: var(--fg-2);">Open any completed call to inspect its Call Strip transcript, outcome score, and billing.</p>
+            </div>
+            <button type="button" onclick="loadCalls()" class="c-btn">Refresh logs</button>
+          </div>
+
+          <div id="callLogsContainer" style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="c-panel">Loading call logs...</div>
+          </div>
+        </section>
+
+        <!-- VIEW 6: LIVE SANDBOX -->
+        <section id="view-sandbox" class="view-panel" hidden>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;">
+            <div>
+              <h1 style="margin: 0; font-size: 1.375rem; font-weight: 600;">Live browser sandbox</h1>
+              <p id="interimSpeechBox" style="margin: 4px 0 0; font-size: 0.8125rem; color: var(--fg-2);">Test mic input, interruptions, and latency metrics directly inside your browser.</p>
+            </div>
+            <span id="callStatusBadge" class="state-badge">Idle</span>
+          </div>
+
+          <div class="console-sandbox-grid">
+            <div class="c-panel" style="display: flex; flex-direction: column; gap: 12px;">
+              <div>
+                <label class="c-label" for="sandboxVoiceSelect">Voice persona</label>
+                <select id="sandboxVoiceSelect" onchange="syncVoiceSelection(this.value, 'sandbox')" class="c-select"></select>
+                <p id="sandboxVoiceHint" style="margin: 4px 0 0; font-size: 0.75rem; color: var(--fg-3);"></p>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <label class="c-label" for="sandboxGenreSelect" style="margin: 0;">Scenario</label>
+                  <button type="button" onclick="useGenreRecommendedVoiceInSandbox()" class="c-btn c-btn--ghost" style="min-height: 28px; padding: 0 8px; font-size: 0.75rem; color: var(--accent-text);">Use recommended</button>
+                </div>
+                <select id="sandboxGenreSelect" onchange="onSandboxGenreChanged()" class="c-select"></select>
+                <p id="sandboxGenreHint" style="margin: 4px 0 0; font-size: 0.75rem; color: var(--fg-3);"></p>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 6px;">
+                <button type="button" id="startCallBtn" onclick="toggleCall()" class="c-btn c-btn--primary">Start live call</button>
+                <div style="display: flex; gap: 8px;">
+                  <button type="button" id="testMicBtn" onclick="toggleMicTest()" class="c-btn" style="flex: 1;">Test mic</button>
+                  <button type="button" id="appMuteBtn" onclick="toggleSandboxMute()" class="c-btn" disabled aria-pressed="false" style="flex: 1;">Mute</button>
+                  <button type="button" id="appInterruptBtn" onclick="interruptCallFromApp()" class="c-btn" hidden style="flex: 1;">Interrupt AI</button>
+                </div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--fg-3); margin-bottom: 6px;">
+                  <span>Mic input</span>
+                  <span id="micDbLabel" class="mono-metric">Idle</span>
+                </div>
+                <div class="meter-track"><div id="micVolumeBar" class="meter-fill"></div></div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+                <div class="c-panel--subtle"><div style="font-size: 0.75rem; color: var(--fg-3);">STT</div><div id="statStt" class="mono-metric">--</div></div>
+                <div class="c-panel--subtle"><div style="font-size: 0.75rem; color: var(--fg-3);">LLM</div><div id="statLlm" class="mono-metric">--</div></div>
+                <div class="c-panel--subtle"><div style="font-size: 0.75rem; color: var(--fg-3);">TTS</div><div id="statVoice" class="mono-metric">--</div></div>
+                <div class="c-panel--subtle"><div style="font-size: 0.75rem; color: var(--fg-3);">Turn</div><div id="statTotal" class="mono-metric">--</div></div>
+              </div>
+            </div>
+
+            <div class="c-panel" style="display: flex; flex-direction: column; gap: 12px; min-height: 480px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="margin: 0; font-size: 1rem; font-weight: 600;">Transcript stream</h2>
+                <button type="button" onclick="clearTranscript()" class="c-btn">Clear</button>
+              </div>
+              <div id="transcriptBox" class="transcript-stream" style="flex: 1;">
+                <div style="margin: auto; text-align: center; color: var(--fg-3); font-size: 0.875rem;">
+                  Transcript will stream here when a call begins.
+                </div>
+              </div>
+              <div id="sandboxQuickPrompts" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+              <form id="sandboxTextForm" onsubmit="submitSandboxTypedTurn(event)" style="display: flex; gap: 8px;">
+                <label class="sr-only" for="sandboxTypedInput">Type a reply during sandbox call</label>
+                <input id="sandboxTypedInput" type="text" class="c-input" placeholder="Or type a prospect message during a live call..." style="flex: 1;" />
+                <button type="submit" class="c-btn c-btn--primary">Send turn</button>
+              </form>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <div id="businessModal" class="modal-backdrop" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="bizModalTitle">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h2 id="bizModalTitle" style="margin: 0; font-size: 1.125rem; font-weight: 600;">Edit business profile</h2>
+        <button type="button" onclick="closeBusinessModal()" class="c-btn">Close</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div><label class="c-label" for="bizNameInput">Business name</label><input id="bizNameInput" type="text" class="c-input" /></div>
+        <div><label class="c-label" for="bizWebsiteInput">Website</label><input id="bizWebsiteInput" type="url" class="c-input" /></div>
+        <div>
+          <label class="c-label" for="bizIndustrySelect">Industry</label>
+          <select id="bizIndustrySelect" class="c-select">
+            <option value="Multimedia & Localization">Multimedia &amp; Localization</option>
+            <option value="Real Estate">Real Estate</option>
+            <option value="EdTech & Admissions">EdTech &amp; Admissions</option>
+            <option value="Insurance & Lending">Insurance &amp; Lending</option>
+            <option value="D2C Ecommerce">D2C Ecommerce</option>
+          </select>
+        </div>
+        <div><label class="c-label" for="bizDescInput">Value proposition &amp; pitch notes</label><textarea id="bizDescInput" rows="3" class="c-textarea"></textarea></div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button type="button" onclick="closeBusinessModal()" class="c-btn">Cancel</button>
+          <button type="button" onclick="saveBusinessProfile()" class="c-btn c-btn--primary">Save profile</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="addSimModal" class="modal-backdrop" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="simModalTitle">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h2 id="simModalTitle" style="margin: 0; font-size: 1.125rem; font-weight: 600;">Connect SIM / SIP trunk</h2>
+        <button type="button" onclick="closeAddSimModal()" class="c-btn">Close</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div>
+          <label class="c-label" for="simProviderSelect">Gateway provider</label>
+          <select id="simProviderSelect" onchange="updateSimFormFields()" class="c-select">
+            <option value="vobiz">Vobiz SIP Trunk</option>
+            <option value="exotel">Exotel Virtual DID</option>
+            <option value="tatatele">Tata Tele Smartflo</option>
+            <option value="sim_gateway">GoIP Hardware GSM Gateway</option>
+            <option value="android_forwarder">Android SIM Forwarder</option>
+          </select>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div><label class="c-label" for="simCarrierSelect">Carrier</label><select id="simCarrierSelect" class="c-select"><option value="Jio">Jio 5G</option><option value="Airtel">Airtel</option><option value="Vi">Vi</option></select></div>
+          <div><label class="c-label" for="simSlotSelect">SIM slot</label><select id="simSlotSelect" class="c-select"><option value="1">Slot 1</option><option value="2">Slot 2</option></select></div>
+        </div>
+        <div><label class="c-label" for="simPhoneInput">Phone number</label><input id="simPhoneInput" type="text" class="c-input mono-metric" value="+91 80 4736 9200" /></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div><label class="c-label" for="simNameInput">Label</label><input id="simNameInput" type="text" class="c-input" value="Primary Trunk" /></div>
+          <div><label class="c-label" for="simChannelsSelect">Concurrent lines</label><select id="simChannelsSelect" class="c-select"><option value="1">1 line</option><option value="2" selected>2 lines</option><option value="4">4 lines</option><option value="8">8 lines</option></select></div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button type="button" onclick="closeAddSimModal()" class="c-btn">Cancel</button>
+          <button type="button" onclick="submitAddSim()" class="c-btn c-btn--primary">Connect line</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="addLeadModal" class="modal-backdrop" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="leadModalTitle">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h2 id="leadModalTitle" style="margin: 0; font-size: 1.125rem; font-weight: 600;">Add lead</h2>
+        <button type="button" onclick="closeAddLeadModal()" class="c-btn">Close</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div><label class="c-label" for="leadNameInput">Contact name</label><input id="leadNameInput" type="text" class="c-input" placeholder="e.g. Suresh Verma" /></div>
+        <div><label class="c-label" for="leadPhoneInput">Phone (+91)</label><input id="leadPhoneInput" type="tel" class="c-input mono-metric" placeholder="+91 98490 00000" /></div>
+        <div><label class="c-label" for="leadCompanyInput">Company</label><input id="leadCompanyInput" type="text" class="c-input" placeholder="Company name" /></div>
+        <div><label class="c-label" for="leadIndustryInput">Industry</label><input id="leadIndustryInput" type="text" class="c-input" placeholder="Media, EdTech, Real Estate" /></div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button type="button" onclick="closeAddLeadModal()" class="c-btn">Cancel</button>
+          <button type="button" onclick="submitAddLead()" class="c-btn c-btn--primary">Add to queue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="csvModal" class="modal-backdrop" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="csvModalTitle">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h2 id="csvModalTitle" style="margin: 0; font-size: 1.125rem; font-weight: 600;">Import leads from CSV</h2>
+        <button type="button" onclick="closeCsvModal()" class="c-btn">Close</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="csv-dropzone">
+          <label class="c-label" for="csvFileInput">Select CSV file (columns: name, phone, company, industry)</label>
+          <input id="csvFileInput" type="file" accept=".csv" onchange="handleCsvFileSelected(event)" class="c-input" style="padding-top: 7px;" />
+          <div style="margin-top: 10px;">
+            <button type="button" onclick="downloadSampleCsv()" class="c-btn c-btn--ghost" style="color: var(--accent-text);">Download sample CSV</button>
+          </div>
+        </div>
+        <div id="csvPreviewContainer" class="c-panel--subtle" hidden>
+          <div id="csvParsedCount" class="mono-metric" style="color: var(--live);">0 leads</div>
+          <div id="csvPreviewRows" style="margin-top: 6px; font-size: 0.8125rem; color: var(--fg-2);"></div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button type="button" onclick="closeCsvModal()" class="c-btn">Cancel</button>
+          <button type="button" id="importCsvBtn" onclick="submitImportCsv()" class="c-btn c-btn--primary" disabled>Import leads</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="rechargeModal" class="modal-backdrop" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="rechargeModalTitle">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h2 id="rechargeModalTitle" style="margin: 0; font-size: 1.125rem; font-weight: 600;">Add workspace credits (demo balance)</h2>
+        <button type="button" onclick="closeRechargeModal()" class="c-btn">Close</button>
+      </div>
+      <p style="margin: 0 0 14px; font-size: 0.875rem; color: var(--fg-2);">
+        Top up local wallet balance for dialer testing. Production billing connects via Razorpay UPI / GST invoicing.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+        <button type="button" onclick="submitRecharge(100)" class="c-btn mono-metric">&#8377;100</button>
+        <button type="button" onclick="submitRecharge(500)" class="c-btn mono-metric">&#8377;500</button>
+        <button type="button" onclick="submitRecharge(2000)" class="c-btn c-btn--primary mono-metric">&#8377;2,000</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Command Palette (Ctrl+K, §8.1) -->
+  <div id="cmdPaletteModal" class="modal-backdrop" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="cmdPaletteLabel" style="max-width: 520px;">
+      <label id="cmdPaletteLabel" class="c-label" for="cmdPaletteInput">Jump to section, lead, or recent call</label>
+      <input id="cmdPaletteInput" type="text" class="c-input" placeholder="Type overview, leads, sandbox, or a contact name..." oninput="renderCommandPaletteResults(this.value)" />
+      <div id="cmdPaletteList" style="margin-top: 12px; display: flex; flex-direction: column; gap: 4px; max-height: 280px; overflow-y: auto;"></div>
+      <div style="margin-top: 12px; text-align: right;">
+        <button type="button" onclick="closeCommandPalette()" class="c-btn">Close (Esc)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALL DETAIL DRAWER (§8.4: Call Strip + Captured Facts + Engine Details Toggle) -->
+  <div id="callDrawer" class="drawer-backdrop" hidden>
+    <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawerCustomerName">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--rule);">
+        <div>
+          <h2 id="drawerCustomerName" style="margin: 0; font-size: 1.25rem; font-weight: 600;">Prospect</h2>
+          <div id="drawerCustomerPhone" class="mono-metric" style="color: var(--fg-3); margin-top: 2px;">+91 00000 00000</div>
+        </div>
+        <button type="button" onclick="closeCallDrawer()" class="c-btn">Close</button>
+      </div>
+
+      <div class="drawer-split">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.875rem; font-weight: 600;">Call Strip transcript</span>
+            <button type="button" onclick="copyDrawerTranscript()" class="c-btn" style="min-height: 32px; padding: 0 10px; font-size: 0.75rem;">Copy text</button>
+          </div>
+          <div id="drawerTranscriptList" class="transcript-stream" style="min-height: 280px; max-height: 420px;"></div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="c-panel--subtle">
+            <div style="font-size: 0.75rem; color: var(--fg-3);">Outcome</div>
+            <div id="drawerStatusTag" class="state-badge state-badge--live" style="margin-top: 6px;">WARM</div>
+            <div style="margin-top: 12px; display: flex; justify-content: space-between; font-size: 0.8125rem;">
+              <span style="color: var(--fg-3);">Duration</span>
+              <span id="drawerDuration" class="mono-metric">0s</span>
+            </div>
+            <div style="margin-top: 6px; display: flex; justify-content: space-between; font-size: 0.8125rem;">
+              <span style="color: var(--fg-3);">Billed credits</span>
+              <span id="drawerBilled" class="mono-metric">&#8377;0.00</span>
+            </div>
+          </div>
+
+          <div class="c-panel--subtle">
+            <div style="font-size: 0.75rem; color: var(--fg-3);">Executive summary</div>
+            <p id="drawerSummaryText" style="margin: 6px 0 0; font-size: 0.8125rem; color: var(--fg-2); line-height: 1.5;"></p>
+          </div>
+
+          <div class="c-panel--subtle">
+            <div style="font-size: 0.75rem; color: var(--fg-3);">Agreed next step</div>
+            <div id="drawerNextStep" style="margin-top: 6px; font-size: 0.875rem; font-weight: 600; color: var(--live);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let activeTab = 'overview';
+    let currentFilter = 'all';
+    let allLeadsCache = [];
+    let allCallsCache = [];
+    let allSimsCache = [];
+    let parsedCsvLeads = [];
+    let isCalling = false;
+    let outperoClient = null;
+    let customEngineWsUrl = '';
+    let activeSandboxAgentEl = null;
+    let audioCtx = null;
+    let testMicStream = null;
+    let testScriptProcessor = null;
+    let isTestingMic = false;
+    let currentPreviewAudio = null;
+    let catalogVoices = [];
+    let catalogGenres = [];
+    let selectedVoiceUnsaved = false;
+
+    function escapeHtmlSafe(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function showToast(title, message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const cls = type === 'error' ? 'toast-item toast-item--fail' : (type === 'success' ? 'toast-item toast-item--live' : 'toast-item');
+      toast.className = cls;
+      toast.innerHTML =
+        '<div><div style="font-weight: 600; color: var(--fg);">' + escapeHtmlSafe(title) + '</div>' +
+        '<div style="font-size: 0.8125rem; color: var(--fg-2); margin-top: 2px;">' + escapeHtmlSafe(message) + '</div></div>' +
+        '<button type="button" class="c-btn c-btn--ghost" style="min-height: 28px; padding: 0 6px; font-size: 0.75rem;" aria-label="Dismiss notice">Close</button>';
+      toast.querySelector('button').onclick = () => toast.remove();
+      container.appendChild(toast);
+      if (type !== 'error') {
+        setTimeout(() => { if (toast.parentNode) toast.remove(); }, 5000);
+      }
+    }
+
+    // Sidebar Collapse & Mobile Sheet
+    document.getElementById('sidebarCollapseBtn').addEventListener('click', function () {
+      const shell = document.getElementById('appShell');
+      const collapsed = shell.classList.toggle('is-collapsed');
+      this.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+      this.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+    });
+
+    function openMobileSidebar() {
+      const bd = document.getElementById('mobileSidebarBackdrop');
+      bd.hidden = false;
+      document.getElementById('closeMobileDrawerBtn').focus();
+    }
+    function closeMobileSidebar() {
+      document.getElementById('mobileSidebarBackdrop').hidden = true;
+      document.getElementById('openMobileDrawerBtn').focus();
+    }
+    document.getElementById('openMobileDrawerBtn').addEventListener('click', openMobileSidebar);
+    document.getElementById('closeMobileDrawerBtn').addEventListener('click', closeMobileSidebar);
+
+    // Engine Health Popover
+    function toggleEngineHealthPopover() {
+      const btn = document.getElementById('engineHealthBtn');
+      const pop = document.getElementById('engineHealthPopover');
+      const next = pop.hidden;
+      pop.hidden = !next;
+      btn.setAttribute('aria-expanded', next ? 'true' : 'false');
+    }
+
+    // Command Palette (Ctrl+K)
+    function openCommandPalette() {
+      const modal = document.getElementById('cmdPaletteModal');
+      modal.hidden = false;
+      const inp = document.getElementById('cmdPaletteInput');
+      inp.value = '';
+      renderCommandPaletteResults('');
+      inp.focus();
+    }
+    function closeCommandPalette() {
+      document.getElementById('cmdPaletteModal').hidden = true;
+    }
+    function renderCommandPaletteResults(query) {
+      const q = (query || '').trim().toLowerCase();
+      const items = [
+        { label: 'Overview & readiness', meta: 'Tab', act: () => switchTab('overview') },
+        { label: 'Call logs & Call Strip', meta: 'Tab', act: () => switchTab('calls') },
+        { label: 'Leads & CSV campaigns', meta: 'Tab', act: () => switchTab('campaigns') },
+        { label: 'Agents & voice cloning', meta: 'Tab', act: () => switchTab('employees') },
+        { label: 'Numbers & telecom trunks', meta: 'Tab', act: () => switchTab('sims') },
+        { label: 'Live browser sandbox', meta: 'Tab', act: () => switchTab('sandbox') },
+      ];
+      allLeadsCache.slice(0, 6).forEach((l) => {
+        items.push({ label: 'Lead: ' + (l.name || l.phone), meta: l.company || l.status, act: () => { switchTab('campaigns'); } });
+      });
+      allCallsCache.slice(0, 5).forEach((c) => {
+        items.push({ label: 'Call: ' + (c.customer_name || c.customer_phone), meta: c.qualification_status || 'Call', act: () => { switchTab('calls'); openCallDrawer(c.id); } });
+      });
+      const list = document.getElementById('cmdPaletteList');
+      list.innerHTML = '';
+      const matched = items.filter((it) => !q || it.label.toLowerCase().includes(q) || String(it.meta).toLowerCase().includes(q));
+      if (!matched.length) {
+        list.innerHTML = '<div style="padding: 12px; color: var(--fg-3); font-size: 0.875rem;">No matching sections or records.</div>';
+        return;
+      }
+      matched.forEach((it) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'sidebar-btn';
+        b.innerHTML = '<span>' + escapeHtmlSafe(it.label) + '</span><span class="mono-metric" style="color: var(--fg-3);">' + escapeHtmlSafe(it.meta) + '</span>';
+        b.onclick = () => { closeCommandPalette(); it.act(); };
+        list.appendChild(b);
+      });
+    }
+
+    document.addEventListener('keydown', function (ev) {
+      if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 'k') {
+        ev.preventDefault();
+        openCommandPalette();
+      } else if (ev.key === 'Escape') {
+        closeBusinessModal();
+        closeAddSimModal();
+        closeAddLeadModal();
+        closeCsvModal();
+        closeRechargeModal();
+        closeCommandPalette();
+        closeCallDrawer();
+        document.getElementById('engineHealthPopover').hidden = true;
+        document.getElementById('engineHealthBtn').setAttribute('aria-expanded', 'false');
+        if (!document.getElementById('mobileSidebarBackdrop').hidden) closeMobileSidebar();
+      }
+    });
+
+    function switchTab(tab) {
+      activeTab = tab;
+      document.querySelectorAll('.view-panel').forEach((el) => { el.hidden = true; });
+      document.querySelectorAll('.sidebar-btn').forEach((btn) => {
+        btn.classList.remove('is-active');
+        btn.removeAttribute('aria-current');
+      });
+      const targetView = document.getElementById('view-' + tab);
+      if (targetView) targetView.hidden = false;
+      const targetBtn = document.getElementById('tab-' + tab);
+      if (targetBtn) {
+        targetBtn.classList.add('is-active');
+        targetBtn.setAttribute('aria-current', 'page');
+      }
+      if (tab === 'overview') loadAllOverviewStats();
+      if (tab === 'sims') loadSims();
+      if (tab === 'employees') loadEmployees();
+      if (tab === 'campaigns') loadLeads();
+      if (tab === 'calls') loadCalls();
+    }
+
+    async function loadWorkspace() {
+      try {
+        const res = await fetch('/api/workspace');
+        if (!res.ok) throw new Error('Workspace HTTP ' + res.status);
+        const data = await res.json();
+        document.getElementById('navWorkspaceName').textContent = (data.business_name || 'Pontis LLP') + ' Workspace';
+        const bal = '\u20B9' + Number(data.credits_balance || 0).toFixed(2);
+        document.getElementById('walletBalance').textContent = bal;
+        document.getElementById('metricWalletPill').textContent = bal;
+        document.getElementById('overviewBizName').textContent = data.business_name || 'Pontis LLP';
+        document.getElementById('overviewBizIndustry').textContent = data.industry || 'Multimedia & AI Localization';
+        document.getElementById('overviewBizWeb').textContent = data.website || 'https://pontis.in';
+        document.getElementById('overviewBizDesc').textContent = data.description || '';
+        document.getElementById('bizNameInput').value = data.business_name || 'Pontis LLP';
+        document.getElementById('bizWebsiteInput').value = data.website || 'https://pontis.in';
+        document.getElementById('bizIndustrySelect').value = data.industry || 'Multimedia & Localization';
+        document.getElementById('bizDescInput').value = data.description || '';
+        document.getElementById('stepBizSub').textContent = (data.business_name || 'Pontis LLP') + ' ready';
+      } catch (e) {
+        showToast('Workspace load failed', 'Could not load workspace settings. Reload the page to retry.', 'error');
+      }
+    }
+
+    function openBusinessModal() { document.getElementById('businessModal').hidden = false; }
+    function closeBusinessModal() { document.getElementById('businessModal').hidden = true; }
+
+    async function saveBusinessProfile() {
+      try {
+        const payload = {
+          business_name: document.getElementById('bizNameInput').value,
+          website: document.getElementById('bizWebsiteInput').value,
+          industry: document.getElementById('bizIndustrySelect').value,
+          description: document.getElementById('bizDescInput').value
+        };
+        const res = await fetch('/api/workspace', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        showToast('Profile saved', 'Company details updated.', 'success');
+        closeBusinessModal();
+        loadWorkspace();
+      } catch (e) {
+        showToast('Save failed', 'Could not save workspace profile: ' + e.message, 'error');
+      }
+    }
+
+    async function loadSims() {
+      const container = document.getElementById('simListContainer');
+      try {
+        const res = await fetch('/api/sims');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        allSimsCache = await res.json();
+        document.getElementById('simCountBadge').textContent = allSimsCache.length;
+        document.getElementById('metricSims').textContent = allSimsCache.length + ' active';
+        document.getElementById('metricSimsNote').textContent = allSimsCache.length ? 'Configured outbound lines' : 'Browser calls work without a trunk';
+        document.getElementById('stepSimSub').textContent = allSimsCache.length + ' trunk(s) active';
+        updateReadinessBadge();
+
+        container.innerHTML = '';
+        if (allSimsCache.length === 0) {
+          container.innerHTML = '<div class="c-panel" style="grid-column: 1 / -1;">No SIM or SIP trunks connected. Click "Add SIM / trunk" above to add one, or test in Live sandbox without a trunk.</div>';
+          return;
+        }
+        allSimsCache.forEach((sim) => {
+          const div = document.createElement('div');
+          div.className = 'c-panel';
+          div.style.display = 'flex';
+          div.style.flexDirection = 'column';
+          div.style.justifyContent = 'space-between';
+          div.style.gap = '12px';
+          div.innerHTML =
+            '<div>' +
+            '<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">' +
+            '<span class="state-badge state-badge--live">' + escapeHtmlSafe((sim.carrier || sim.provider || '').toUpperCase()) + '</span>' +
+            '<span class="mono-metric" style="color: var(--fg-3);">' + escapeHtmlSafe(sim.channels) + ' channels</span></div>' +
+            '<div class="mono-metric" style="font-size: 1.0625rem; margin-top: 10px;">' + escapeHtmlSafe(sim.phone_number) + '</div>' +
+            '<div style="font-size: 0.8125rem; color: var(--fg-3); margin-top: 4px;">' + escapeHtmlSafe(sim.caller_name || 'Primary trunk') + '</div>' +
+            '</div>' +
+            '<div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--rule); gap: 8px;">' +
+            '<div style="display: flex; gap: 8px;">' +
+            '<button type="button" class="c-btn" onclick="pingSim(\'' + escapeHtmlSafe(sim.id) + '\')">Ping test</button>' +
+            '<button type="button" class="c-btn" onclick="copyText(\'' + escapeHtmlSafe(sim.phone_number) + '\')">Copy</button></div>' +
+            '<button type="button" class="c-btn c-btn--danger" onclick="deleteSim(\'' + escapeHtmlSafe(sim.id) + '\')">Disconnect</button></div>';
+          container.appendChild(div);
+        });
+      } catch (e) {
+        container.innerHTML = '<div class="c-panel" style="border-color: var(--fail);">Failed to load trunks. Reload to retry.</div>';
+      }
+    }
+
+    function copyText(txt) {
+      navigator.clipboard.writeText(txt).then(() => showToast('Copied', 'Phone number copied to clipboard.', 'success'));
+    }
+
+    function openAddSimModal() { document.getElementById('addSimModal').hidden = false; }
+    function closeAddSimModal() { document.getElementById('addSimModal').hidden = true; }
+    function updateSimFormFields() {
+      const prov = document.getElementById('simProviderSelect').value;
+      const phone = document.getElementById('simPhoneInput');
+      if (prov === 'vobiz') phone.value = '+91 80 4736 9200';
+      else if (prov === 'sim_gateway') phone.value = '+91 80 4736 9102';
+      else if (prov === 'exotel') phone.value = '+91 80 4736 9100';
+      else if (prov === 'tatatele') phone.value = '+91 40 6812 3456';
+      else phone.value = '+91 98490 88776';
+    }
+
+    async function submitAddSim() {
+      try {
+        const res = await fetch('/api/sims', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            provider: document.getElementById('simProviderSelect').value,
+            carrier: document.getElementById('simCarrierSelect').value,
+            sim_slot: document.getElementById('simSlotSelect').value,
+            phone_number: document.getElementById('simPhoneInput').value,
+            caller_name: document.getElementById('simNameInput').value,
+            channels: document.getElementById('simChannelsSelect').value
+          })
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        showToast('Trunk connected', 'Line added to outbound registry.', 'success');
+        closeAddSimModal();
+        loadSims();
+      } catch (e) {
+        showToast('Trunk error', 'Could not add trunk: ' + e.message, 'error');
+      }
+    }
+
+    async function deleteSim(id) {
+      if (!confirm('Disconnect this telecom trunk?')) return;
+      await fetch('/api/sims/' + encodeURIComponent(id), { method: 'DELETE' });
+      showToast('Trunk removed', 'Disconnected from workspace.', 'info');
+      loadSims();
+    }
+
+    async function pingSim(simId) {
+      try {
+        const res = await fetch('/api/sims/' + encodeURIComponent(simId) + '/ping', { method: 'POST' });
+        const data = await res.json();
+        showToast('Diagnostic OK', data.carrier + ' | Latency ' + data.latency_ms + ' ms | SIP 200 OK', 'success');
+      } catch (e) {
+        showToast('Ping failed', 'Check server connectivity and retry.', 'error');
+      }
+    }
+
+    async function submitVoiceClone() {
+      const name = (document.getElementById('cloneVoiceName').value || '').trim();
+      const accent = document.getElementById('cloneVoiceAccent').value || 'en-GB';
+      const gender = document.getElementById('cloneVoiceGender').value || 'female';
+      const fileInput = document.getElementById('cloneVoiceFile');
+      const consent = document.getElementById('cloneVoiceConsent').checked;
+      const btn = document.getElementById('cloneVoiceBtn');
+      if (!name) return showToast('Name required', 'Enter a name for the cloned voice.', 'error');
+      if (!fileInput.files || !fileInput.files[0]) return showToast('Audio required', 'Select a 10 to 60s WAV or MP3 recording.', 'error');
+      if (!consent) return showToast('Consent required', 'Confirm written speaker permission before cloning.', 'error');
+
+      const fd = new FormData();
+      fd.append('name', name);
+      fd.append('accent', accent);
+      fd.append('gender', gender);
+      fd.append('consent', 'true');
+      fd.append('clip', fileInput.files[0]);
+
+      btn.disabled = true;
+      btn.textContent = 'Cloning...';
+      try {
+        const res = await fetch('/api/voice/clone', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (!res.ok || data.error) throw new Error(data.error || 'Voice clone failed');
+        showToast('Voice cloned', data.voice.name + ' is now available in your persona list.', 'success');
+        await loadPlatformConfig();
+      } catch (e) {
+        showToast('Clone unavailable', e.message + ' Top up Cartesia credits if cloning is disabled.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Clone voice';
+      }
+    }
+
+    async function playVoiceSample(speaker, event) {
+      if (event) event.stopPropagation();
+      const spk = (speaker || 'archie').trim();
+      const btn = document.getElementById('play-btn-' + spk);
+      if (currentPreviewAudio) {
+        currentPreviewAudio.pause();
+        currentPreviewAudio = null;
+        document.querySelectorAll('[id^="play-btn-"]').forEach((b) => { b.textContent = 'Play'; });
+      }
+      if (btn) btn.textContent = 'Loading...';
+      try {
+        const res = await fetch('/api/voice/preview?speaker=' + encodeURIComponent(spk));
+        const data = await res.json();
+        if (!data.audio) throw new Error(data.error || 'No audio returned');
+        const audio = new Audio('data:audio/wav;base64,' + data.audio);
+        currentPreviewAudio = audio;
+        if (btn) btn.textContent = 'Stop';
+        await audio.play();
+        audio.onended = () => {
+          if (btn) btn.textContent = 'Play';
+          currentPreviewAudio = null;
+        };
+      } catch (e) {
+        if (btn) btn.textContent = 'Play';
+        showToast('Preview failed', 'Could not play voice preview. Check speaker audio and try again.', 'error');
+      }
+    }
+
+    function syncVoiceSelection(voiceId, source) {
+      const found = catalogVoices.find((v) => v.key === voiceId);
+      const name = (found && found.name) ? found.name : voiceId;
+      const agentSel = document.getElementById('agentVoiceSelect');
+      const sandboxSel = document.getElementById('sandboxVoiceSelect');
+      if (agentSel) agentSel.value = voiceId;
+      if (sandboxSel) sandboxSel.value = voiceId;
+      const hint = document.getElementById('sandboxVoiceHint');
+      if (hint && found) {
+        hint.textContent = found.description || found.label;
+      }
+      const nameInput = document.getElementById('agentNameInput');
+      const oldName = (nameInput.value || '').trim();
+      if (source === 'employees') {
+        nameInput.value = name;
+        const firstBox = document.getElementById('agentFirstSentence');
+        if (firstBox && oldName && oldName !== name && firstBox.value.includes('this is ' + oldName)) {
+          firstBox.value = firstBox.value.replace('this is ' + oldName, 'this is ' + name);
+        }
+      }
+      highlightVoiceCard(voiceId);
+      selectedVoiceUnsaved = true;
+    }
+
+    function highlightVoiceCard(voiceId) {
+      document.querySelectorAll('[id^="card-voice-"]').forEach((c) => {
+        c.style.borderColor = 'var(--rule)';
+      });
+      const sel = document.getElementById('card-voice-' + voiceId);
+      if (sel) sel.style.borderColor = 'var(--accent)';
+    }
+
+    function renderVoiceCardsGrid() {
+      const grid = document.getElementById('voiceCardsGrid');
+      if (!grid || !catalogVoices.length) return;
+      grid.innerHTML = '';
+      catalogVoices.forEach((v) => {
+        const card = document.createElement('div');
+        card.id = 'card-voice-' + v.key;
+        card.className = 'c-panel--subtle';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.justifyContent = 'space-between';
+        card.style.gap = '10px';
+        card.innerHTML =
+          '<div>' +
+          '<div style="display: flex; justify-content: space-between; align-items: center;">' +
+          '<strong>' + escapeHtmlSafe(v.name || v.key) + '</strong>' +
+          '<span class="mono-metric" style="font-size: 0.75rem; color: var(--fg-3);">' + escapeHtmlSafe(v.gender || 'voice') + '</span></div>' +
+          '<p style="margin: 4px 0 0; font-size: 0.75rem; color: var(--fg-2);">' + escapeHtmlSafe(v.description || v.label) + '</p></div>' +
+          '<div style="display: flex; justify-content: space-between; gap: 6px; padding-top: 8px; border-top: 1px solid var(--rule);">' +
+          '<button type="button" id="play-btn-' + escapeHtmlSafe(v.key) + '" class="c-btn" style="min-height: 32px; font-size: 0.75rem;">Play</button>' +
+          '<button type="button" class="c-btn c-btn--primary select-voice-btn" style="min-height: 32px; font-size: 0.75rem;">Select</button></div>';
+        card.querySelector('#play-btn-' + v.key).onclick = (ev) => playVoiceSample(v.key, ev);
+        card.querySelector('.select-voice-btn').onclick = () => selectVoicePersona(v.key, v.name || v.key, 'en-IN');
+        grid.appendChild(card);
+      });
+      highlightVoiceCard(document.getElementById('agentVoiceSelect').value || 'archie');
+    }
+
+    async function selectVoicePersona(voiceId, name, lang) {
+      document.getElementById('agentVoiceSelect').value = voiceId;
+      document.getElementById('sandboxVoiceSelect').value = voiceId;
+      document.getElementById('agentNameInput').value = name;
+      document.getElementById('agentLangSelect').value = lang;
+      syncVoiceSelection(voiceId, 'employees');
+      await saveEmployeeConfig(true);
+      showToast('Voice updated', name + ' selected for sandbox and outbound agents.', 'success');
+    }
+
+    function applyGenreToEmployeeForm() {
+      const gKey = document.getElementById('employeeGenrePresetSelect').value;
+      const g = catalogGenres.find((item) => item.key === gKey);
+      if (!g) return;
+      const name = (document.getElementById('agentNameInput').value || 'Aria').trim();
+      if (g.default_role) document.getElementById('agentRoleInput').value = g.default_role;
+      if (g.opening_greeting) document.getElementById('agentFirstSentence').value = g.opening_greeting.replace(/\{agent_name\}/g, name);
+      document.getElementById('sandboxGenreSelect').value = g.key;
+      onSandboxGenreChanged();
+      showToast('Preset loaded', 'Applied scenario "' + g.label + '".', 'info');
+    }
+
+    async function loadEmployees() {
+      try {
+        const res = await fetch('/api/employees');
+        const emps = await res.json();
+        if (emps.length > 0 && !selectedVoiceUnsaved) {
+          const e = emps[0];
+          document.getElementById('agentNameInput').value = e.name || 'Aria';
+          document.getElementById('agentRoleInput').value = e.role || 'Outbound Sales Executive';
+          if (e.voice_id) {
+            document.getElementById('agentVoiceSelect').value = e.voice_id;
+            document.getElementById('sandboxVoiceSelect').value = e.voice_id;
+            highlightVoiceCard(e.voice_id);
+          }
+          document.getElementById('agentLangSelect').value = e.primary_lang || 'en-IN';
+          if (e.first_sentence) document.getElementById('agentFirstSentence').value = e.first_sentence;
+          if (e.knowledge_base) document.getElementById('agentKnowledgeBase').value = e.knowledge_base;
+          if (e.custom_instructions) document.getElementById('agentCustomRules').value = e.custom_instructions;
+          document.getElementById('stepVoiceSub').textContent = (e.name || 'Aria') + ' configured';
+        }
+      } catch (e) {}
+    }
+
+    async function saveEmployeeConfig(silent = false) {
+      const payload = {
+        id: 'emp_01',
+        name: document.getElementById('agentNameInput').value,
+        role: document.getElementById('agentRoleInput').value,
+        voice_id: document.getElementById('agentVoiceSelect').value,
+        primary_lang: document.getElementById('agentLangSelect').value,
+        first_sentence: document.getElementById('agentFirstSentence').value,
+        knowledge_base: document.getElementById('agentKnowledgeBase').value,
+        custom_instructions: document.getElementById('agentCustomRules').value
+      };
+      const res = await fetch('/api/employees', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      selectedVoiceUnsaved = false;
+      if (!silent) showToast('Agent saved', (payload.name || 'Agent') + ' settings deployed.', 'success');
+    }
+
+    async function loadLeads() {
+      const tbody = document.getElementById('leadsTableBody');
+      try {
+        const res = await fetch('/api/leads');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        allLeadsCache = await res.json();
+        document.getElementById('leadCountBadge').textContent = allLeadsCache.length;
+        const qualCount = allLeadsCache.filter((l) => l.status === 'qualified_hot' || l.status === 'qualified_warm').length;
+        document.getElementById('metricQualified').textContent = qualCount + ' qualified';
+        document.getElementById('metricLeadsTotal').textContent = allLeadsCache.length + ' total leads in queue';
+        document.getElementById('stepLeadSub').textContent = allLeadsCache.length + ' leads queued';
+        updateReadinessBadge();
+        renderLeadsTable();
+      } catch (e) {
+        tbody.innerHTML = '<tr><td colspan="6" style="padding: 20px; text-align: center; color: var(--fail);">Failed to load leads. Refresh to retry.</td></tr>';
+      }
+    }
+
+    function updateReadinessBadge() {
+      const badge = document.getElementById('onboardingProgressBadge');
+      if (!badge) return;
+      if (allSimsCache.length > 0 && allLeadsCache.length > 0) {
+        badge.textContent = 'Ready for outreach';
+        badge.className = 'state-badge state-badge--live';
+      } else {
+        badge.textContent = 'Setup in progress';
+        badge.className = 'state-badge state-badge--warn';
+      }
+    }
+
+    function filterLeads(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('[id^="filter-"]').forEach((btn) => {
+        btn.className = 'c-btn';
+        btn.setAttribute('aria-pressed', 'false');
+      });
+      const activeBtn = document.getElementById('filter-' + filter);
+      if (activeBtn) {
+        activeBtn.className = 'c-btn c-btn--primary';
+        activeBtn.setAttribute('aria-pressed', 'true');
+      }
+      renderLeadsTable();
+    }
+
+    function renderLeadsTable() {
+      const tbody = document.getElementById('leadsTableBody');
+      tbody.innerHTML = '';
+      const filtered = currentFilter === 'all' ? allLeadsCache : allLeadsCache.filter((l) => l.status === currentFilter);
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="padding: 24px; text-align: center; color: var(--fg-3);">No leads in this filter. Click Add lead or Import CSV above.</td></tr>';
+        return;
+      }
+      filtered.forEach((lead) => {
+        const tr = document.createElement('tr');
+        const badgeCls = lead.status === 'qualified_hot' ? 'state-badge state-badge--live' : (lead.status === 'qualified_warm' ? 'state-badge state-badge--warn' : 'state-badge');
+        tr.innerHTML =
+          '<td data-label="Name" style="font-weight: 600;">' + escapeHtmlSafe(lead.name || 'Prospect') + '</td>' +
+          '<td data-label="Phone" class="mono-metric">' + escapeHtmlSafe(lead.phone) + '</td>' +
+          '<td data-label="Company">' + escapeHtmlSafe(lead.company || 'N/A') + '</td>' +
+          '<td data-label="Industry">' + escapeHtmlSafe(lead.industry || 'General') + '</td>' +
+          '<td data-label="Status"><span class="' + badgeCls + '">' + escapeHtmlSafe((lead.status || 'new').replace('_', ' ').toUpperCase()) + '</span></td>' +
+          '<td data-label="Actions" style="text-align: right;"><div style="display: inline-flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end;">' +
+          '<button type="button" class="c-btn c-btn--primary dial-btn" style="min-height: 32px; font-size: 0.75rem;">Auto dial</button>' +
+          '<button type="button" class="c-btn sb-btn" style="min-height: 32px; font-size: 0.75rem;">Sandbox</button>' +
+          '<button type="button" class="c-btn c-btn--danger del-btn" style="min-height: 32px; font-size: 0.75rem;" aria-label="Delete lead">Delete</button>' +
+          '</div></td>';
+        tr.querySelector('.dial-btn').onclick = (ev) => autonomousDialLead(lead.id, lead.name || 'Prospect', ev);
+        tr.querySelector('.sb-btn').onclick = () => triggerLeadCall(lead.phone, lead.name || 'Prospect');
+        tr.querySelector('.del-btn').onclick = () => deleteLead(lead.id);
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function autonomousDialLead(leadId, leadName, event) {
+      const btn = event.currentTarget;
+      btn.disabled = true;
+      btn.textContent = 'Dialing...';
+      try {
+        const res = await fetch('/api/leads/dial/' + encodeURIComponent(leadId), { method: 'POST' });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          showToast('Call logged (' + data.qualification_status + ')', 'Called ' + leadName + ' (' + data.duration_seconds + 's). Billed \u20B9' + Number(data.billed_credits).toFixed(2) + '.', 'success');
+          loadLeads();
+          loadCalls();
+          loadWorkspace();
+        } else {
+          showToast('Dial blocked', data.error || 'Could not place call.', 'error');
+        }
+      } catch (e) {
+        showToast('Network error', 'Check server connection and try again.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Auto dial';
+      }
+    }
+
+    async function batchDialAllLeads() {
+      if (!confirm('Place simulated outbound calls across up to 5 new leads in queue?')) return;
+      try {
+        const res = await fetch('/api/leads/batch-dial', { method: 'POST' });
+        const data = await res.json();
+        showToast('Batch complete', 'Dialed ' + data.dialed_count + ' leads. Open Call logs to inspect transcripts.', 'success');
+        loadLeads();
+        loadCalls();
+        loadWorkspace();
+      } catch (e) {
+        showToast('Batch failed', e.message, 'error');
+      }
+    }
+
+    async function deleteLead(leadId) {
+      if (!confirm('Remove this lead from the queue?')) return;
+      await fetch('/api/leads/' + encodeURIComponent(leadId), { method: 'DELETE' });
+      showToast('Lead removed', 'Deleted from workspace queue.', 'info');
+      loadLeads();
+    }
+
+    function openAddLeadModal() { document.getElementById('addLeadModal').hidden = false; }
+    function closeAddLeadModal() { document.getElementById('addLeadModal').hidden = true; }
+    async function submitAddLead() {
+      const name = document.getElementById('leadNameInput').value.trim();
+      const phone = document.getElementById('leadPhoneInput').value.trim();
+      if (!phone) return showToast('Phone required', 'Enter a valid +91 phone number.', 'error');
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name || 'Prospect',
+          phone: phone,
+          company: document.getElementById('leadCompanyInput').value.trim(),
+          industry: document.getElementById('leadIndustryInput').value.trim()
+        })
+      });
+      showToast('Lead added', (name || phone) + ' added to queue.', 'success');
+      closeAddLeadModal();
+      loadLeads();
+    }
+
+    function openCsvModal() {
+      parsedCsvLeads = [];
+      document.getElementById('csvFileInput').value = '';
+      document.getElementById('csvPreviewContainer').hidden = true;
+      document.getElementById('importCsvBtn').disabled = true;
+      document.getElementById('csvModal').hidden = false;
+    }
+    function closeCsvModal() { document.getElementById('csvModal').hidden = true; }
+
+    function handleCsvFileSelected(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => parseCsvText(e.target.result);
+      reader.readAsText(file);
+    }
+
+    function parseCsvText(csvText) {
+      const lines = csvText.split(/\r?\n/).filter((l) => l.trim().length > 0);
+      if (lines.length < 2) return showToast('Invalid CSV', 'Include a header row and at least one contact row.', 'error');
+      const headers = lines[0].split(',').map((h) => h.trim().toLowerCase());
+      const nameIdx = headers.indexOf('name');
+      const phoneIdx = headers.indexOf('phone');
+      const compIdx = headers.indexOf('company');
+      const indIdx = headers.indexOf('industry');
+      const noteIdx = headers.indexOf('custom_notes') !== -1 ? headers.indexOf('custom_notes') : headers.indexOf('notes');
+      if (phoneIdx === -1) return showToast('Missing phone column', 'CSV header must include "phone".', 'error');
+
+      parsedCsvLeads = [];
+      for (let i = 1; i < lines.length; i++) {
+        const parts = lines[i].split(',').map((p) => p.trim());
+        if (parts.length > phoneIdx && parts[phoneIdx]) {
+          parsedCsvLeads.push({
+            name: nameIdx !== -1 && parts[nameIdx] ? parts[nameIdx] : 'Prospect',
+            phone: parts[phoneIdx],
+            company: compIdx !== -1 && parts[compIdx] ? parts[compIdx] : 'Company',
+            industry: indIdx !== -1 && parts[indIdx] ? parts[indIdx] : 'General',
+            custom_notes: noteIdx !== -1 && parts[noteIdx] ? parts[noteIdx] : ''
+          });
+        }
+      }
+      if (parsedCsvLeads.length > 0) {
+        document.getElementById('csvPreviewContainer').hidden = false;
+        document.getElementById('csvParsedCount').textContent = parsedCsvLeads.length + ' leads parsed';
+        const previewRows = document.getElementById('csvPreviewRows');
+        previewRows.innerHTML = '';
+        parsedCsvLeads.slice(0, 3).forEach((l) => {
+          const row = document.createElement('div');
+          row.textContent = l.name + ' (' + l.phone + ') - ' + l.company;
+          previewRows.appendChild(row);
+        });
+        document.getElementById('importCsvBtn').disabled = false;
+      }
+    }
+
+    async function submitImportCsv() {
+      if (!parsedCsvLeads.length) return;
+      const res = await fetch('/api/leads/batch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leads: parsedCsvLeads })
+      });
+      const data = await res.json();
+      showToast('CSV imported', 'Added ' + data.inserted_count + ' contacts to queue.', 'success');
+      closeCsvModal();
+      loadLeads();
+    }
+
+    function downloadSampleCsv() {
+      const csvContent = 'name,phone,company,industry,custom_notes\nRajesh Varma,+919849011223,Mythri Movie Makers,Film & OTT,Needs Telugu to Hindi dubbed trailer\nPooja Reddy,+919700144556,LearnSmart Edu,EdTech,Looking for SCORM localization\n';
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'sample_leads_vaakora.csv';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    async function loadCalls() {
+      const container = document.getElementById('callLogsContainer');
+      try {
+        const res = await fetch('/api/calls');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        allCallsCache = await res.json();
+        document.getElementById('callCountBadge').textContent = allCallsCache.length;
+        document.getElementById('metricCalls').textContent = allCallsCache.length + ' calls';
+        if (allCallsCache.length > 0) {
+          const totalSec = allCallsCache.reduce((acc, c) => acc + Number(c.duration_seconds || 0), 0);
+          const avgSec = Math.round(totalSec / allCallsCache.length);
+          const mins = Math.floor(avgSec / 60);
+          const rem = avgSec % 60;
+          document.getElementById('metricAvgDur').textContent = 'Average duration: ' + mins + 'm ' + rem + 's';
+        } else {
+          document.getElementById('metricAvgDur').textContent = 'Average duration: No calls yet';
+        }
+
+        container.innerHTML = '';
+        if (allCallsCache.length === 0) {
+          container.innerHTML = '<div class="c-panel">No calls recorded yet. Open Live sandbox or Auto dial a lead to create your first transcript.</div>';
+          return;
+        }
+        allCallsCache.forEach((c) => {
+          const card = document.createElement('div');
+          card.className = 'c-panel';
+          card.style.display = 'flex';
+          card.style.flexDirection = 'column';
+          card.style.gap = '10px';
+          const tier = c.qualification_status || 'WARM';
+          const badgeCls = tier === 'HOT' ? 'state-badge state-badge--live' : (tier === 'WARM' ? 'state-badge state-badge--warn' : 'state-badge state-badge--fail');
+          card.innerHTML =
+            '<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px;">' +
+            '<div>' +
+            '<div style="font-weight: 600;">' + escapeHtmlSafe(c.customer_name || 'Prospect') + ' <span class="mono-metric" style="color: var(--fg-3); font-weight: 400;">' + escapeHtmlSafe(c.customer_phone) + '</span></div>' +
+            '<div class="mono-metric" style="font-size: 0.75rem; color: var(--fg-3); margin-top: 2px;">' + escapeHtmlSafe(c.created_at) + ' | ' + escapeHtmlSafe(c.duration_seconds) + 's | \u20B9' + Number(c.billed_credits || 0).toFixed(2) + '</div>' +
+            '</div>' +
+            '<div style="display: flex; align-items: center; gap: 8px;">' +
+            '<span class="' + badgeCls + '">' + escapeHtmlSafe(tier) + '</span>' +
+            '<button type="button" class="c-btn inspect-btn">Inspect call</button>' +
+            '</div></div>' +
+            '<div style="font-size: 0.875rem; color: var(--fg-2);">' + escapeHtmlSafe(c.summary || 'Completed call record.') + '</div>';
+          card.querySelector('.inspect-btn').onclick = () => openCallDrawer(c.id);
+          container.appendChild(card);
+        });
+      } catch (e) {
+        container.innerHTML = '<div class="c-panel" style="border-color: var(--fail);">Failed to load call logs. Refresh to retry.</div>';
+      }
+    }
+
+    async function openCallDrawer(callId) {
+      try {
+        const res = await fetch('/api/calls/' + encodeURIComponent(callId));
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const c = await res.json();
+        document.getElementById('drawerCustomerName').textContent = c.customer_name || 'Prospect';
+        document.getElementById('drawerCustomerPhone').textContent = c.customer_phone || '';
+        document.getElementById('drawerDuration').textContent = (c.duration_seconds || 0) + 's';
+        document.getElementById('drawerBilled').textContent = '\u20B9' + Number(c.billed_credits || 0).toFixed(2);
+        const tier = c.qualification_status || 'WARM';
+        const tag = document.getElementById('drawerStatusTag');
+        tag.textContent = tier;
+        tag.className = tier === 'HOT' ? 'state-badge state-badge--live' : (tier === 'WARM' ? 'state-badge state-badge--warn' : 'state-badge state-badge--fail');
+        document.getElementById('drawerSummaryText').textContent = c.summary || 'No summary captured.';
+        document.getElementById('drawerNextStep').textContent = c.agreed_next_step || 'None logged';
+
+        const list = document.getElementById('drawerTranscriptList');
+        list.innerHTML = '';
+        const transcript = Array.isArray(c.transcript) ? c.transcript : [];
+        if (transcript.length === 0) {
+          list.innerHTML = '<div style="margin: auto; color: var(--fg-3);">No dialogue transcript recorded for this call.</div>';
+        } else {
+          transcript.forEach((t) => {
+            const isAI = t.role === 'assistant';
+            const turn = document.createElement('div');
+            turn.className = 'turn-bubble ' + (isAI ? 'turn-bubble--agent' : 'turn-bubble--lead');
+            turn.innerHTML =
+              '<div class="turn-bubble__head"><span style="color: ' + (isAI ? 'var(--accent-text)' : 'var(--live)') + ';">' + (isAI ? 'AGENT' : 'LEAD') + '</span></div>' +
+              '<div style="font-size: 0.875rem; line-height: 1.5;">' + escapeHtmlSafe(t.content || '') + '</div>';
+            list.appendChild(turn);
+          });
+        }
+        document.getElementById('callDrawer').hidden = false;
+      } catch (e) {
+        showToast('Drawer error', 'Could not load call details.', 'error');
+      }
+    }
+
+    function closeCallDrawer() { document.getElementById('callDrawer').hidden = true; }
+    function copyDrawerTranscript() {
+      const list = document.getElementById('drawerTranscriptList');
+      navigator.clipboard.writeText(list.innerText).then(() => showToast('Copied', 'Transcript copied to clipboard.', 'success'));
+    }
+
+    function openRechargeModal() { document.getElementById('rechargeModal').hidden = false; }
+    function closeRechargeModal() { document.getElementById('rechargeModal').hidden = true; }
+    async function submitRecharge(amount) {
+      const res = await fetch('/api/workspace/recharge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount })
+      });
+      const data = await res.json();
+      showToast('Credits added', 'Added \u20B9' + amount + '. Balance is now \u20B9' + Number(data.credits_balance).toFixed(2), 'success');
+      closeRechargeModal();
+      loadWorkspace();
+    }
+
+    function triggerLeadCall(phone, name) {
+      switchTab('sandbox');
+      showToast('Sandbox ready', 'Loaded prospect ' + name + ' (' + phone + '). Click Start live call.', 'info');
+    }
+
+    function setCallStatus(label, type) {
+      const badge = document.getElementById('callStatusBadge');
+      badge.textContent = label;
+      badge.className = type === 'speaking' ? 'state-badge state-badge--live' : (type === 'recording' ? 'state-badge state-badge--warn' : (type === 'calling' ? 'state-badge state-badge--live' : 'state-badge'));
+    }
+
+    function clearTranscript() {
+      document.getElementById('transcriptBox').innerHTML = '<div style="margin: auto; color: var(--fg-3); font-size: 0.875rem;">Transcript cleared.</div>';
+    }
+
+    function rmsToPercent(rms) { return Math.min(100, Math.round(Math.sqrt(Math.max(0, rms)) * 180)); }
+
+    function resetSandboxUiToIdle(statusMsg) {
+      isCalling = false;
+      activeSandboxAgentEl = null;
+      document.getElementById('startCallBtn').textContent = 'Start live call';
+      document.getElementById('startCallBtn').className = 'c-btn c-btn--primary';
+      document.getElementById('testMicBtn').hidden = false;
+      document.getElementById('appMuteBtn').disabled = true;
+      document.getElementById('appMuteBtn').textContent = 'Mute';
+      document.getElementById('appMuteBtn').setAttribute('aria-pressed', 'false');
+      document.getElementById('appInterruptBtn').hidden = true;
+      setCallStatus('Idle', 'idle');
+      document.getElementById('micVolumeBar').style.width = '0%';
+      document.getElementById('micDbLabel').textContent = 'Idle';
+      if (statusMsg) document.getElementById('interimSpeechBox').textContent = statusMsg;
+    }
+
+    function toggleSandboxMute() {
+      if (!isCalling || !outperoClient) return;
+      const next = !outperoClient.isMuted;
+      outperoClient.setMuted(next);
+      const b = document.getElementById('appMuteBtn');
+      b.setAttribute('aria-pressed', next ? 'true' : 'false');
+      b.textContent = next ? 'Unmute' : 'Mute';
+    }
+
+    async function toggleMicTest() {
+      if (isCalling) return;
+      const btn = document.getElementById('testMicBtn');
+      const label = document.getElementById('micDbLabel');
+      const bar = document.getElementById('micVolumeBar');
+      const interim = document.getElementById('interimSpeechBox');
+      if (isTestingMic) return stopMicTest();
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') await audioCtx.resume();
+        testMicStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }, video: false });
+        isTestingMic = true;
+        btn.textContent = 'Stop mic test';
+        interim.textContent = 'Mic test running. Speak now to verify signal level.';
+        const src = audioCtx.createMediaStreamSource(testMicStream);
+        testScriptProcessor = audioCtx.createScriptProcessor(2048, 1, 1);
+        testScriptProcessor.onaudioprocess = (ev) => {
+          if (!isTestingMic) return;
+          const inp = ev.inputBuffer.getChannelData(0);
+          let sum = 0;
+          for (let i = 0; i < inp.length; i++) sum += inp[i] * inp[i];
+          const pct = rmsToPercent(Math.sqrt(sum / inp.length));
+          bar.style.width = pct + '%';
+          label.textContent = pct + '%';
+        };
+        const g = audioCtx.createGain();
+        g.gain.value = 0;
+        src.connect(testScriptProcessor);
+        testScriptProcessor.connect(g);
+        g.connect(audioCtx.destination);
+      } catch (err) {
+        showToast('Mic blocked', 'Allow microphone permission in browser settings and retry.', 'error');
+      }
+    }
+
+    function stopMicTest() {
+      isTestingMic = false;
+      if (testScriptProcessor) { try { testScriptProcessor.disconnect(); } catch (e) {} testScriptProcessor = null; }
+      if (testMicStream) { testMicStream.getTracks().forEach((t) => t.stop()); testMicStream = null; }
+      document.getElementById('testMicBtn').textContent = 'Test mic';
+      document.getElementById('micDbLabel').textContent = 'Idle';
+      document.getElementById('micVolumeBar').style.width = '0%';
+    }
+
+    function interruptCallFromApp() {
+      if (!isCalling || !outperoClient) return;
+      outperoClient.clearPlaybackQueue();
+      setCallStatus('Listening', 'calling');
+      document.getElementById('interimSpeechBox').textContent = 'Audio interrupted. Speak naturally.';
+    }
+
+    function appendTranscriptMessage(role, text, sttMs, llmMs, ttfaMs, turnId) {
+      const box = document.getElementById('transcriptBox');
+      if (box.innerText.includes('Transcript will stream here')) box.innerHTML = '';
+      const isAI = role === 'agent';
+      const agentLabel = (document.getElementById('agentNameInput').value || 'Archie').trim();
+      if (isAI && turnId !== undefined && activeSandboxAgentEl && activeSandboxAgentEl.dataset.turnId === String(turnId)) {
+        activeSandboxAgentEl.querySelector('.sandbox-msg-body').textContent = text;
+        const m = activeSandboxAgentEl.querySelector('.sandbox-msg-metrics');
+        if (m && (llmMs || ttfaMs)) m.textContent = 'LLM ' + (llmMs || 0) + ' ms';
+        box.scrollTop = box.scrollHeight;
+        return;
+      }
+      const div = document.createElement('div');
+      if (isAI && turnId !== undefined) div.dataset.turnId = String(turnId);
+      div.className = 'turn-bubble ' + (isAI ? 'turn-bubble--agent' : 'turn-bubble--lead');
+      const metricsText = isAI ? (llmMs ? ('LLM ' + llmMs + ' ms') : '') : (sttMs ? ('STT ' + sttMs + ' ms') : '');
+      div.innerHTML =
+        '<div class="turn-bubble__head"><span style="color: ' + (isAI ? 'var(--accent-text)' : 'var(--live)') + ';">' +
+        escapeHtmlSafe(isAI ? agentLabel : 'PROSPECT') + '</span><span class="sandbox-msg-metrics">' + escapeHtmlSafe(metricsText) + '</span></div>' +
+        '<div class="sandbox-msg-body" style="font-size: 0.875rem; line-height: 1.5;">' + escapeHtmlSafe(text) + '</div>';
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+      activeSandboxAgentEl = isAI ? div : null;
+    }
+
+    async function toggleCall() {
+      if (isCalling) stopCall();
+      else await startCall();
+    }
+
+    async function startCall() {
+      stopMicTest();
+      isCalling = true;
+      activeSandboxAgentEl = null;
+      document.getElementById('statStt').textContent = '--';
+      document.getElementById('statLlm').textContent = '--';
+      document.getElementById('statVoice').textContent = '--';
+      document.getElementById('statTotal').textContent = '--';
+      document.getElementById('startCallBtn').textContent = 'Hang up & save report';
+      document.getElementById('startCallBtn').className = 'c-btn c-btn--danger';
+      document.getElementById('testMicBtn').hidden = true;
+      document.getElementById('appMuteBtn').disabled = false;
+      document.getElementById('appInterruptBtn').hidden = false;
+      setCallStatus('Connecting...', 'calling');
+
+      const chosenGenre = document.getElementById('sandboxGenreSelect').value || 'microdrama_producer';
+      const chosenVoice = document.getElementById('sandboxVoiceSelect').value || document.getElementById('agentVoiceSelect').value || 'archie';
+      const isCustomEmployee = chosenGenre === 'custom_employee';
+      const agentName = (document.getElementById('agentNameInput').value || 'Archie').trim();
+      const kb = (document.getElementById('agentKnowledgeBase').value || '').trim();
+      const rules = (document.getElementById('agentCustomRules').value || '').trim();
+      const customPrompt = (isCustomEmployee && (kb || rules))
+        ? ['You are ' + agentName + ', calling on behalf of Pontis LLP in Hyderabad. Identify yourself as an AI assistant. Speak crisp Indian English.', kb ? ('Knowledge:\n' + kb) : '', rules ? ('Rules:\n' + rules) : ''].filter(Boolean).join('\n\n')
+        : '';
+
+      outperoClient = new OutperoVoiceClient({
+        onConnected: () => setCallStatus('Connected', 'calling'),
+        onEngineReady: (info) => {
+          setCallStatus('Listening', 'calling');
+          document.getElementById('interimSpeechBox').textContent = 'Live as ' + info.agent_name + ' | ' + info.tts + ' | ' + info.llm;
+        },
+        onUserInterim: (txt) => { if (txt) document.getElementById('interimSpeechBox').textContent = 'Hearing: "' + txt + '"'; },
+        onUserTranscript: (msg) => {
+          if (msg.stt_ms) document.getElementById('statStt').textContent = msg.stt_ms + ' ms';
+          appendTranscriptMessage('user', msg.text || '', msg.stt_ms || 0, 0, 0);
+        },
+        onAgentTextDelta: (msg) => {
+          const turnId = String(msg.turn_id ?? '0');
+          if (!activeSandboxAgentEl || activeSandboxAgentEl.dataset.turnId !== turnId) {
+            appendTranscriptMessage('agent', msg.text || '', 0, 0, 0, turnId);
+          } else {
+            activeSandboxAgentEl.querySelector('.sandbox-msg-body').textContent += msg.text || '';
+            document.getElementById('transcriptBox').scrollTop = document.getElementById('transcriptBox').scrollHeight;
+          }
+        },
+        onAgentText: (msg) => {
+          appendTranscriptMessage('agent', msg.text || '', 0, msg.llm_ms || 0, msg.tts_ms || 0, msg.turn_id ?? '0');
+          activeSandboxAgentEl = null;
+        },
+        onMetrics: (msg) => {
+          if (msg.stt_ms) document.getElementById('statStt').textContent = msg.stt_ms + ' ms';
+          if (msg.llm_ms) document.getElementById('statLlm').textContent = msg.llm_ms + ' ms';
+          if (msg.tts_ms) document.getElementById('statVoice').textContent = msg.tts_ms + ' ms';
+        },
+        onTurnLatency: (msg) => { if (msg.total_ms) document.getElementById('statTotal').textContent = msg.total_ms + ' ms'; },
+        onBotSpeaking: (speaking) => { if (isCallActive) setCallStatus(speaking ? 'AI speaking' : 'Listening', speaking ? 'speaking' : 'calling'); },
+        onUserSpeaking: (speaking) => { if (isCallActive && speaking) setCallStatus('Hearing you', 'recording'); },
+        onInterruption: () => { activeSandboxAgentEl = null; setCallStatus('Interrupted', 'recording'); },
+        onMicLevel: (rms) => {
+          const pct = rmsToPercent(rms);
+          document.getElementById('micVolumeBar').style.width = pct + '%';
+          if (pct > 6) document.getElementById('micDbLabel').textContent = pct + '%';
+        },
+        onMicError: () => showToast('Microphone blocked', 'Allow microphone access in your browser bar.', 'error'),
+        onCallReport: (report) => {
+          if (report) showToast('Report saved', 'Qualification: ' + (report.qualification_status || 'WARM'), 'success');
+          loadCalls();
+          loadWorkspace();
+        },
+        onError: (msg) => showToast('Engine notice', msg || 'Connection error.', 'error'),
+        onClosed: () => resetSandboxUiToIdle('Call ended. Report saved in Call logs.')
+      });
+
+      await outperoClient.start({
+        speaker: chosenVoice,
+        genre: chosenGenre,
+        llm: 'auto',
+        employee_id: 'emp_01',
+        first_sentence: isCustomEmployee ? (document.getElementById('agentFirstSentence').value || '').trim() : '',
+        system_prompt: customPrompt
+      }, customEngineWsUrl);
+    }
+
+    function onSandboxGenreChanged() {
+      const gKey = document.getElementById('sandboxGenreSelect').value || 'microdrama_producer';
+      const g = catalogGenres.find((item) => item.key === gKey);
+      const hint = document.getElementById('sandboxGenreHint');
+      const qpBox = document.getElementById('sandboxQuickPrompts');
+      if (g) {
+        if (hint) {
+          const rec = catalogVoices.find((v) => v.key === g.recommended_voice);
+          hint.textContent = (g.category || 'Scenario') + ' | Recommended: ' + (rec ? rec.name : g.recommended_voice);
+        }
+        if (qpBox && Array.isArray(g.quick_prompts)) {
+          qpBox.innerHTML = '';
+          g.quick_prompts.forEach((p) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'c-btn';
+            b.style.minHeight = '32px';
+            b.style.fontSize = '0.75rem';
+            b.textContent = p;
+            b.onclick = () => sendSandboxQuickPrompt(p);
+            qpBox.appendChild(b);
+          });
+        }
+      }
+    }
+
+    function useGenreRecommendedVoiceInSandbox() {
+      const gKey = document.getElementById('sandboxGenreSelect').value;
+      const g = catalogGenres.find((item) => item.key === gKey);
+      if (g && g.recommended_voice) {
+        syncVoiceSelection(g.recommended_voice, 'sandbox');
+        playVoiceSample(g.recommended_voice);
+      }
+    }
+
+    function sendSandboxQuickPrompt(text) {
+      if (!isCalling || !outperoClient) return showToast('Start call first', 'Press Start live call before sending prompts.', 'info');
+      appendTranscriptMessage('user', text, 0, 0, 0);
+      outperoClient.sendText(text);
+    }
+
+    function submitSandboxTypedTurn(ev) {
+      ev.preventDefault();
+      const inp = document.getElementById('sandboxTypedInput');
+      const txt = (inp.value || '').trim();
+      if (!txt) return;
+      if (!isCalling || !outperoClient) return showToast('Start call first', 'Press Start live call before sending a message.', 'info');
+      inp.value = '';
+      appendTranscriptMessage('user', txt, 0, 0, 0);
+      outperoClient.sendText(txt);
+    }
+
+    function stopCall() {
+      if (outperoClient) {
+        outperoClient.endCall();
+        outperoClient = null;
+      }
+      resetSandboxUiToIdle('Generating call report...');
+    }
+
+    async function loadPlatformConfig() {
+      try {
+        const res = await fetch('/api/config');
+        if (!res.ok) return;
+        const cfg = await res.json();
+        customEngineWsUrl = cfg.engine_ws_url || '';
+        const eng = cfg.engine || {};
+        document.getElementById('healthVad').textContent = eng.vad || 'silero';
+        document.getElementById('healthStt').textContent = eng.stt || 'deepgram-nova-3';
+        document.getElementById('healthLlm').textContent = eng.llm || 'groq';
+        document.getElementById('healthTts').textContent = eng.tts || 'smallest_ai_lightning';
+        const dot = document.getElementById('engineHealthDot');
+        const lbl = document.getElementById('engineHealthLabel');
+        if (eng.tts === 'deepgram_aura_fallback') {
+          dot.className = 'status-dot status-dot--warn';
+          lbl.textContent = 'Failover TTS';
+          document.getElementById('healthReasonNote').textContent = 'Running on backup TTS (' + (eng.tts_reason || 'failover') + ').';
+        } else {
+          dot.className = 'status-dot status-dot--live';
+          lbl.textContent = 'Engine OK';
+          document.getElementById('healthReasonNote').textContent = 'Primary speech, reasoning, and synthesis pipelines reachable.';
+        }
+
+        if (Array.isArray(eng.voices) && eng.voices.length > 0) {
+          catalogVoices = eng.voices;
+          const optsHtml = eng.voices.map((v) => '<option value="' + escapeHtmlSafe(v.key) + '">' + escapeHtmlSafe(v.label) + '</option>').join('');
+          const empSel = document.getElementById('agentVoiceSelect');
+          const sbSel = document.getElementById('sandboxVoiceSelect');
+          const curVal = empSel.value || 'archie';
+          empSel.innerHTML = optsHtml;
+          empSel.value = curVal;
+          sbSel.innerHTML = optsHtml;
+          sbSel.value = curVal;
+          renderVoiceCardsGrid();
+        }
+        if (Array.isArray(eng.genres) && eng.genres.length > 0) {
+          catalogGenres = eng.genres;
+          const byCat = {};
+          eng.genres.forEach((g) => {
+            const cat = g.category || 'Scenarios';
+            if (!byCat[cat]) byCat[cat] = [];
+            byCat[cat].push(g);
+          });
+          const genreHtml = Object.entries(byCat)
+            .map(([cat, list]) => '<optgroup label="' + escapeHtmlSafe(cat) + '">' + list.map((g) => '<option value="' + escapeHtmlSafe(g.key) + '">' + escapeHtmlSafe(g.label) + '</option>').join('') + '</optgroup>')
+            .join('');
+          document.getElementById('sandboxGenreSelect').innerHTML = genreHtml;
+          document.getElementById('employeeGenrePresetSelect').innerHTML = genreHtml;
+          onSandboxGenreChanged();
+        }
+      } catch (e) {}
+    }
+
+    async function loadAllOverviewStats() {
+      await Promise.all([loadWorkspace(), loadSims(), loadLeads(), loadCalls()]);
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadPlatformConfig();
+      await loadEmployees();
+      await loadAllOverviewStats();
+    });
+  </script>
+</body>
+</html>

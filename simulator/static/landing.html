@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en" data-surface="paper">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vaakora | Indian English AI Calling Agents</title>
+  <meta name="description" content="Vaakora calls leads in natural Indian English, handles objections live, and returns transcripts with lead scores. Live client demo by Pontis LLP." />
+  <link rel="canonical" href="https://vaakora.in/" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta property="og:title" content="Vaakora | AI Calling Agents That Sound Like Your Sales Team" />
+  <meta property="og:description" content="Vaakora calls your leads in natural Indian English, handles objections, and returns a full transcript and score. Hear Archie live on Pontis LLP scripts." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://vaakora.in/" />
+  <meta property="og:image" content="https://vaakora.in/static/brand/og-card.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Vaakora | Indian English AI Calling Agents" />
+  <meta name="twitter:description" content="Vaakora calls leads in natural Indian English, handles objections, and logs a scored transcript. Try Archie live in your browser." />
+  <meta name="twitter:image" content="https://vaakora.in/static/brand/og-card.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@100..112.5,400..600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/callingout-tokens.css" />
+  <link rel="stylesheet" href="/static/css/callingout-marketing.css" />
+  <script src="/static/js/callingout-site.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "Vaakora",
+        "url": "https://vaakora.in/",
+        "logo": "https://vaakora.in/static/brand/logo-mark.svg",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Hyderabad",
+          "addressRegion": "Telangana",
+          "addressCountry": "IN"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "grievance@vaakora.in",
+          "contactType": "customer support"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Vaakora",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "url": "https://vaakora.in/",
+        "description": "AI phone agents built in Hyderabad that call leads in natural Indian English, answer questions, and produce transcripts and qualification scores.",
+        "offers": {
+          "@type": "Offer",
+          "price": "4999",
+          "priceCurrency": "INR"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does Vaakora sound human?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Vaakora uses natural Indian English voice synthesis rather than robotic readouts. You can audition six voices on this page or speak live with Archie in your browser before signing up."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will people know they are talking to an AI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Every Vaakora agent states it is an AI assistant in its opening line and answers honestly whenever a listener asks."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which languages work today?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Indian English (en-IN) and global English voices run in production today. Hindi and Telugu workflows will be enabled publicly only after end-to-end testing completes."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does Vaakora handle DND numbers and TRAI hours?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Calling hours are restricted by default to 09:00 to 21:00 IST, promotional campaigns require DLT entity headers on 140/160 series routes, and opt-out requests immediately disconnect and suppress the number."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How is talk time billed?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Plans include monthly minutes starting at Rs 4,999 for 1,000 minutes (Rs 5.00/min effective rate on Starter, Rs 4.29/min on Growth), billed per second rounded up to the nearest 6 seconds on connected calls."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand-link" href="/" aria-label="Vaakora Home">
+        <img src="/static/brand/logo-mark.svg" alt="" role="presentation" width="24" height="24" />
+        <span class="brand-wordmark">Vaakora</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary navigation">
+        <div class="site-nav__dropdown">
+          <button type="button" class="site-nav__link" data-dropdown-trigger aria-expanded="false" aria-controls="productMenu">
+            Product
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div id="productMenu" class="site-nav__menu" hidden>
+            <a href="#workflows">
+              Instant lead callback
+              <span>Call web form leads while interest is active</span>
+            </a>
+            <a href="#workflows">
+              Outbound campaigns
+              <span>Upload CSV lists and review scored transcripts</span>
+            </a>
+            <a href="#inside-a-call">
+              Call Detail &amp; Call Strip
+              <span>Inspect transcripts, latency, and next steps</span>
+            </a>
+          </div>
+        </div>
+        <a class="site-nav__link" href="/voices">Voices</a>
+        <a class="site-nav__link" href="/pricing">Pricing</a>
+        <a class="site-nav__link" href="/trust">Trust &amp; compliance</a>
+        <a class="site-nav__link" href="/simulator">Sandbox</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="btn btn--ghost btn--sm header-console-link" href="/app">Open console</a>
+        <a class="btn btn--primary btn--sm" href="/demo">Talk to Archie</a>
+        <button type="button" id="mobileMenuTrigger" class="mobile-menu-trigger" aria-expanded="false" aria-controls="mobileMenuSheet">
+          Menu
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="mobileMenuSheet" class="mobile-sheet" role="dialog" aria-modal="true" aria-label="Mobile navigation" hidden>
+    <div class="mobile-sheet__top">
+      <a class="brand-link" href="/">
+        <img src="/static/brand/logo-mark.svg" alt="" role="presentation" width="24" height="24" />
+        <span class="brand-wordmark">Vaakora</span>
+      </a>
+      <button type="button" id="mobileMenuClose" class="btn btn--secondary btn--sm">Close</button>
+    </div>
+    <nav class="mobile-sheet__nav" aria-label="Mobile links">
+      <a href="/demo">Talk to Archie (Live Demo)</a>
+      <a href="/voices">Voices</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/trust">Trust &amp; compliance</a>
+      <a href="/app">Open console</a>
+      <a href="/simulator">Engine sandbox</a>
+    </nav>
+  </div>
+
+  <main id="main-content">
+    <!-- Section 1: Asymmetric Hero with Live Call Strip -->
+    <section class="section section--first">
+      <div class="container hero-grid">
+        <div>
+          <h1 class="display-title">AI calling agents that sound like your sales team.</h1>
+          <p class="body-lg" style="margin-top: 20px; max-width: 52ch;">
+            Vaakora calls your leads in natural Indian English, answers their questions, and sends you a transcript and a lead score for every call. Live client demo configured for Pontis LLP, Hyderabad.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn--primary" href="/demo">Talk to Archie</a>
+            <a class="btn btn--secondary" href="/pricing">See pricing</a>
+          </div>
+          <p class="hero-note">
+            No signup needed for the browser demo. Uses your microphone and plays real-time audio.
+          </p>
+        </div>
+
+        <div id="heroCallStrip" class="call-strip" data-surface="obsidian" data-audio-src="/static/previews/hero-archie-call.wav">
+          <div class="call-strip__head">
+            <div class="call-strip__title">
+              <span class="waveform-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+              <span>Sample call: Archie, Pontis LLP client demo</span>
+            </div>
+            <button type="button" id="heroStripPlayBtn" class="call-strip__play" aria-pressed="false">
+              Play Archie sample
+            </button>
+          </div>
+          <div class="call-strip__progress" aria-hidden="true">
+            <div id="heroStripProgress" class="call-strip__progress-fill"></div>
+          </div>
+
+          <div class="call-strip__lanes">
+            <div class="call-lane">
+              <span class="call-lane__speaker">ARCHIE</span>
+              <div class="call-lane__content">
+                <p class="call-lane__text">"Hi, this is Archie, an AI assistant calling from Pontis LLP in Hyderabad. Do you have 30 seconds?"</p>
+                <div class="call-lane__meta call-lane__meta--hidden" hidden>
+                  <span>TTS 178 ms</span>
+                  <span>16 kHz PCM</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="call-lane call-lane--lead">
+              <span class="call-lane__speaker">LEAD</span>
+              <div class="call-lane__content">
+                <p class="call-lane__text">"Yes, tell me quickly what your studio does."</p>
+                <div class="call-lane__meta call-lane__meta--hidden" hidden>
+                  <span>STT 479 ms</span>
+                  <span>Deepgram Nova-3 en-IN</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="call-lane">
+              <span class="call-lane__speaker">ARCHIE</span>
+              <div class="call-lane__content">
+                <p class="call-lane__text">"We dub training videos and vertical series within 48 hours and send a scored transcript. Want a 60-second sample on WhatsApp?"</p>
+                <div class="call-lane__meta call-lane__meta--hidden" hidden>
+                  <span>LLM 229 ms</span>
+                  <span>TTS 178 ms</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="call-strip__foot">
+            <span id="heroStripStatus">Turn timings recorded on Hyderabad test server</span>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <button type="button" id="heroMetricsToggle" class="call-strip__play" aria-expanded="false">
+                Show engine details
+              </button>
+              <span class="outcome-tag">Outcome: WARM (75)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Voice Picker (Hear 6 featured personas immediately) -->
+    <section class="section section--raised" id="voice-picker">
+      <div class="container">
+        <div class="section-intro--split">
+          <div>
+            <h2 class="h1-title">Hear the voices before you dial a single lead.</h2>
+            <p class="body-text" style="margin-top: 12px;">
+              Every persona uses natural Indian English pacing or executive English voices matched to your audience. Click Play sample on any card, or jump straight into a call.
+            </p>
+          </div>
+          <a class="btn btn--secondary" href="/voices">Browse all 10 voices</a>
+        </div>
+
+        <div class="voice-grid">
+          <article class="voice-card">
+            <div>
+              <div class="voice-card__top">
+                <div>
+                  <h3 class="h3-title">Archie</h3>
+                  <p class="voice-card__meta">B2B sales, Indian English, male</p>
+                </div>
+              </div>
+              <p class="body-text" style="margin-top: 10px; font-size: 0.9375rem;">Mid-tone conversational male executive for founder outreach, discovery, and qualification calls.</p>
+              <div id="status-archie" class="audio-state-note" role="status" aria-live="polite"></div>
+            </div>
+            <div class="voice-card__actions">
+              <button type="button" class="btn btn--secondary btn--sm" data-voice-play="archie" data-idle-label="Play sample" data-status-target="status-archie" aria-pressed="false">Play sample</button>
+              <a class="btn btn--ghost btn--sm" href="/demo?speaker=archie">Try Archie live</a>
+            </div>
+          </article>
+
+          <article class="voice-card">
+            <div>
+              <div class="voice-card__top">
+                <div>
+                  <h3 class="h3-title">Aria</h3>
+                  <p class="voice-card__meta">Studio outreach, Indian English, female</p>
+                </div>
+              </div>
+              <p class="body-text" style="margin-top: 10px; font-size: 0.9375rem;">Warm, clear corporate female voice suited for media studios, real estate callbacks, and D2C buyers.</p>
+              <div id="status-aria" class="audio-state-note" role="status" aria-live="polite"></div>
+            </div>
+            <div class="voice-card__actions">
+              <button type="button" class="btn btn--secondary btn--sm" data-voice-play="aria" data-idle-label="Play sample" data-status-target="status-aria" aria-pressed="false">Play sample</button>
+              <a class="btn btn--ghost btn--sm" href="/demo?speaker=aria">Try Aria live</a>
+            </div>
+          </article>
+
+          <article class="voice-card">
+            <div>
+              <div class="voice-card__top">
+                <div>
+                  <h3 class="h3-title">Kiefer</h3>
+                  <p class="voice-card__meta">Agency demos, Indian English, male</p>
+                </div>
+              </div>
+              <p class="body-text" style="margin-top: 10px; font-size: 0.9375rem;">Confident male pitch voice built for agency retainers, pricing questions, and fast objection handling.</p>
+              <div id="status-kiefer" class="audio-state-note" role="status" aria-live="polite"></div>
+            </div>
+            <div class="voice-card__actions">
+              <button type="button" class="btn btn--secondary btn--sm" data-voice-play="kiefer" data-idle-label="Play sample" data-status-target="status-kiefer" aria-pressed="false">Play sample</button>
+              <a class="btn btn--ghost btn--sm" href="/demo?speaker=kiefer">Try Kiefer live</a>
+            </div>
+          </article>
+
+          <article class="voice-card">
+            <div>
+              <div class="voice-card__top">
+                <div>
+                  <h3 class="h3-title">Katie</h3>
+                  <p class="voice-card__meta">Admissions &amp; follow-ups, Indian English, female</p>
+                </div>
+              </div>
+              <p class="body-text" style="margin-top: 10px; font-size: 0.9375rem;">Friendly conversational female voice for education counselling, demo confirmations, and warm follow-ups.</p>
+              <div id="status-katie" class="audio-state-note" role="status" aria-live="polite"></div>
+            </div>
+            <div class="voice-card__actions">
+              <button type="button" class="btn btn--secondary btn--sm" data-voice-play="katie" data-idle-label="Play sample" data-status-target="status-katie" aria-pressed="false">Play sample</button>
+              <a class="btn btn--ghost btn--sm" href="/demo?speaker=katie">Try Katie live</a>
+            </div>
+          </article>
+
+          <article class="voice-card">
+            <div>
+              <div class="voice-card__top">
+                <div>
+                  <h3 class="h3-title">Gemma</h3>
+                  <p class="voice-card__meta">Executive &amp; OTT, International English, female</p>
+                </div>
+              </div>
+              <p class="body-text" style="margin-top: 10px; font-size: 0.9375rem;">Measured executive female voice tailored for OTT commissioning teams and enterprise reviews.</p>
+              <div id="status-gemma" class="audio-state-note" role="status" aria-live="polite"></div>
+            </div>
+            <div class="voice-card__actions">
+              <button type="button" class="btn btn--secondary btn--sm" data-voice-play="gemma" data-idle-label="Play sample" data-status-target="status-gemma" aria-pressed="false">Play sample</button>
+              <a class="btn btn--ghost btn--sm" href="/demo?speaker=gemma">Try Gemma live</a>
+            </div>
+          </article>
+
+          <article class="voice-card">
+            <div>
+              <div class="voice-card__top">
+                <div>
+                  <h3 class="h3-title">Daniel</h3>
+                  <p class="voice-card__meta">Operations &amp; lending, Indian English, male</p>
+                </div>
+              </div>
+              <p class="body-text" style="margin-top: 10px; font-size: 0.9375rem;">Clear, structured male voice for DSA qualification, policy explanations, and audit-ready workflows.</p>
+              <div id="status-daniel" class="audio-state-note" role="status" aria-live="polite"></div>
+            </div>
+            <div class="voice-card__actions">
+              <button type="button" class="btn btn--secondary btn--sm" data-voice-play="daniel" data-idle-label="Play sample" data-status-target="status-daniel" aria-pressed="false">Play sample</button>
+              <a class="btn btn--ghost btn--sm" href="/demo?speaker=daniel">Try Daniel live</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: How It Works (4-beat sticky flow, breaking away from 3-step template) -->
+    <section class="section">
+      <div class="container flow-split">
+        <div class="flow-split__aside">
+          <h2 class="h1-title">From lead upload to scored transcript without manual dialling.</h2>
+          <p class="body-text" style="margin-top: 14px;">
+            Your team controls the script, guardrails, calling hours, and disqualification rules. Vaakora handles the first conversation and hands you only the calls that need a human follow-up.
+          </p>
+          <div style="margin-top: 24px;">
+            <a class="btn btn--primary" href="/app">Open operator console</a>
+          </div>
+        </div>
+
+        <ol class="step-timeline">
+          <li class="step-timeline__item">
+            <span class="step-timeline__num">1.</span>
+            <div>
+              <h3 class="h3-title">Connect your leads</h3>
+              <p class="body-text" style="margin-top: 6px;">Import a CSV lead list or add contacts in the console. Leads marked DND or outside your calling window stay untouched.</p>
+            </div>
+          </li>
+          <li class="step-timeline__item">
+            <span class="step-timeline__num">2.</span>
+            <div>
+              <h3 class="h3-title">Set agent persona, facts, and disclosure</h3>
+              <p class="body-text" style="margin-top: 6px;">Choose Archie, Aria, or another persona, enter your business pitch hook, and test objections in the browser sandbox before any real call goes out.</p>
+            </div>
+          </li>
+          <li class="step-timeline__item">
+            <span class="step-timeline__num">3.</span>
+            <div>
+              <h3 class="h3-title">Hold natural multi-turn calls</h3>
+              <p class="body-text" style="margin-top: 6px;">Turn detection waits through natural breathing pauses on slow speakers and stops cleanly when a prospect says goodbye or declines.</p>
+            </div>
+          </li>
+          <li class="step-timeline__item">
+            <span class="step-timeline__num">4.</span>
+            <div>
+              <h3 class="h3-title">Review the transcript, score, and next step</h3>
+              <p class="body-text" style="margin-top: 6px;">Every call ends with a qualification tier (HOT, WARM, NURTURE, or UNQUALIFIED), a 0 to 100 rubric score, identified needs, and billed duration.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Section 4: Workflows built and verified today (honest scope, no phantom promises) -->
+    <section class="section section--raised" id="workflows">
+      <div class="container">
+        <div class="section-intro">
+          <h2 class="h1-title">What you can run today on Vaakora.</h2>
+          <p class="body-text" style="margin-top: 12px;">
+            Outbound campaigns, browser testing, and Indian SIP/SIM trunk routing are built into the engine today. Dedicated inbound DID answering is marked in progress and not billed as live.
+          </p>
+        </div>
+
+        <div class="feature-band">
+          <div>
+            <h3 class="h2-title">Upload a list in the morning, read scored calls by lunch.</h3>
+            <p class="body-text" style="margin-top: 12px;">
+              Built for teams calling 100 to 2,000 leads per day across real estate, coaching admissions, loan DSAs, D2C confirmations, and localisation studios.
+            </p>
+            <ul class="check-list">
+              <li>Automatic opt-out and goodbye detection disconnects cleanly</li>
+              <li>Structured qualification rubric scores every completed transcript</li>
+              <li>Built-in TTS failover across Smallest AI, Cartesia, and Deepgram Aura-2</li>
+            </ul>
+          </div>
+          <div class="call-strip" data-surface="obsidian">
+            <div class="call-strip__head">
+              <span class="call-strip__title">Ad agency localisation pitch (Kiefer)</span>
+              <span class="outcome-tag outcome-tag--hot">HOT (95)</span>
+            </div>
+            <div class="call-strip__lanes">
+              <div class="call-lane call-lane--lead">
+                <span class="call-lane__speaker">LEAD</span>
+                <p class="call-lane__text">"Our client wants one 45-second TVC adapted into 8 Indian languages by Friday. Possible or self-serve tool?"</p>
+              </div>
+              <div class="call-lane">
+                <span class="call-lane__speaker">KIEFER</span>
+                <p class="call-lane__text">"That is doable. It is a full-service studio delivering broadcast masters in under 24 hours, not a self-serve tool. Ready to test one clip?"</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-band feature-band--flip">
+          <div>
+            <h3 class="h2-title">Test every objection in your browser before connecting telephony.</h3>
+            <p class="body-text" style="margin-top: 12px;">
+              Use the public demo or the operator sandbox to speak over your microphone, simulate pricing pushback, and inspect exact STT, LLM, and TTS timing before attaching a SIP trunk.
+            </p>
+            <ul class="check-list">
+              <li>Full-duplex 16 kHz PCM audio with real-time barge-in</li>
+              <li>Automatic multi-bucket LLM failover avoids single-model rate-limit stalls</li>
+              <li>Exotel, Plivo, Twilio, and Vobiz WebSocket media serializers ready in code</li>
+            </ul>
+          </div>
+          <div class="call-strip" data-surface="obsidian">
+            <div class="call-strip__head">
+              <span class="call-strip__title">EdTech SCORM qualification (Naledi)</span>
+              <span class="outcome-tag">WARM (75)</span>
+            </div>
+            <div class="call-strip__lanes">
+              <div class="call-lane call-lane--lead">
+                <span class="call-lane__speaker">LEAD</span>
+                <p class="call-lane__text">"We need Hindi and Tamil training videos without breaking our SCORM quiz triggers."</p>
+              </div>
+              <div class="call-lane">
+                <span class="call-lane__speaker">NALEDI</span>
+                <p class="call-lane__text">"We deliver a localized 30-minute module in about 48 hours while keeping quiz triggers intact. Want a 60-second sample?"</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Inside a Call (Obsidian Call Detail preview on Paper) -->
+    <section class="section" id="inside-a-call">
+      <div class="container">
+        <div class="section-intro--split">
+          <div>
+            <h2 class="h1-title">Inside a completed call report.</h2>
+            <p class="body-text" style="margin-top: 12px;">
+              Operators inspect transcripts, extracted buyer facts, agreed next steps, and optional engine telemetry from a single Call Detail drawer inside the console.
+            </p>
+          </div>
+          <button type="button" id="showcaseMetricsToggle" class="btn btn--secondary btn--sm" aria-expanded="false">Show engine details</button>
+        </div>
+
+        <div id="consoleShowcase" class="console-shot" data-surface="obsidian">
+          <div class="console-shot__bar">
+            <div>
+              <strong style="color: var(--fg);">Priya Sharma</strong>
+              <span class="mono-metric" style="color: var(--fg-3); margin-left: 10px;">+91 98•••• 4321</span>
+            </div>
+            <span class="outcome-tag">Outcome: WARM (score 75)</span>
+          </div>
+
+          <div class="console-shot__grid">
+            <div class="console-shot__transcript">
+              <div class="call-strip__lanes" style="padding: 0;">
+                <div class="call-lane">
+                  <span class="call-lane__speaker">0:00 ARCHIE</span>
+                  <div class="call-lane__content">
+                    <p class="call-lane__text">"Hi, this is Archie, an AI assistant calling from Pontis LLP in Hyderabad. Do you have 30 seconds?"</p>
+                  </div>
+                </div>
+                <div class="call-lane call-lane--lead">
+                  <span class="call-lane__speaker">0:06 LEAD</span>
+                  <div class="call-lane__content">
+                    <p class="call-lane__text">"Yes, tell me how pricing works for 40 training videos."</p>
+                    <div class="call-lane__meta call-lane__meta--hidden" hidden>
+                      <span>STT 479 ms</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="call-lane">
+                  <span class="call-lane__speaker">0:09 ARCHIE</span>
+                  <div class="call-lane__content">
+                    <p class="call-lane__text">"Pricing depends on finished minutes and languages. If you share roughly how many minutes total, I can send a tailored rate sheet and 60-second sample on WhatsApp."</p>
+                    <div class="call-lane__meta call-lane__meta--hidden" hidden>
+                      <span>LLM 229 ms</span>
+                      <span>TTS 178 ms (Smallest AI)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="console-shot__sidebar">
+              <h3 class="h3-title" style="font-size: 1rem;">Captured fields</h3>
+              <dl class="kv-list">
+                <div><dt>Role</dt><dd>Head of L&amp;D</dd></div>
+                <div><dt>Identified need</dt><dd>Hindi video localization</dd></div>
+                <div><dt>Agreed next step</dt><dd>Send WhatsApp rate sheet</dd></div>
+                <div><dt>Starter billing (2m 14s)</dt><dd class="mono-metric">&#8377;11.50 (23 pulses)</dd></div>
+              </dl>
+              <a class="btn btn--primary btn--sm" href="/app">Inspect live calls in console</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: What Connects Today -->
+    <section class="section section--raised">
+      <div class="container">
+        <div class="section-intro">
+          <h2 class="h1-title">Connect lists and trunks without rewriting your stack.</h2>
+          <p class="body-text" style="margin-top: 12px;">
+            Start with CSV lead imports, JSON API endpoints, and Indian SIP/SIM trunks today. Google Sheets sync and Meta Lead Ads webhooks sit cleanly in the roadmap as you scale.
+          </p>
+        </div>
+
+        <div class="integration-row">
+          <div class="integration-item">CSV batch upload<span>Live in Console</span></div>
+          <div class="integration-item">REST Leads &amp; Calls API<span>Live (/api/leads, /api/calls)</span></div>
+          <div class="integration-item">Exotel / Plivo / Twilio / Vobiz<span>WebSocket serializers built</span></div>
+          <div class="integration-item">GoIP GSM SIM Gateway<span>SIM trunk registry in Console</span></div>
+          <div class="integration-item">WhatsApp follow-up triggers<span>Captured in post-call next steps</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7: Pricing Preview & Calculator -->
+    <section class="section" id="pricing-preview">
+      <div class="container pricing-split">
+        <div>
+          <h2 class="h1-title">Straightforward rupee pricing, billed per 6-second pulse.</h2>
+          <p class="body-text" style="margin-top: 12px;">
+            Start free in your browser for 30 test minutes. Paid plans cover STT, LLM, voice synthesis, and Indian telephony routing with transparent per-minute overage and GST invoicing.
+          </p>
+          <div class="plan-grid" style="margin-top: 24px;">
+            <div class="plan-card">
+              <div>
+                <h3 class="h3-title">Starter</h3>
+                <p class="caption-text">1 agent, ~40 calls a day</p>
+                <div class="plan-price">&#8377;4,999 <small>/ mo + GST</small></div>
+                <p class="body-text" style="margin-top: 8px; font-size: 0.9375rem;">1,000 included minutes (&#8377;5.00/min). Overage at &#8377;5.50/min.</p>
+              </div>
+              <a class="btn btn--secondary btn--sm" href="/pricing">Compare all plans</a>
+            </div>
+
+            <div class="plan-card plan-card--recommended">
+              <div>
+                <h3 class="h3-title">Growth</h3>
+                <p class="caption-text">Fits 100 to 150 calls a day</p>
+                <div class="plan-price">&#8377;14,999 <small>/ mo + GST</small></div>
+                <p class="body-text" style="margin-top: 8px; font-size: 0.9375rem;">3,500 included minutes (&#8377;4.29/min). Overage at &#8377;4.75/min.</p>
+              </div>
+              <a class="btn btn--primary btn--sm" href="/pricing">Estimate your monthly bill</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="h3-title">Quick monthly cost estimator</h3>
+          <p class="caption-text" style="margin-top: 4px;">Based on 25 calling days per month and connected call duration.</p>
+
+          <div style="display: flex; flex-direction: column; gap: 18px; margin-top: 20px;">
+            <div class="field-group">
+              <div style="display: flex; justify-content: space-between;">
+                <label class="field-label" for="calcCallsDay">Connected calls per day</label>
+                <span id="calcCallsDayValue" class="mono-metric">125 calls/day</span>
+              </div>
+              <input id="calcCallsDay" type="range" min="20" max="500" step="5" value="125" />
+            </div>
+
+            <div class="field-group">
+              <div style="display: flex; justify-content: space-between;">
+                <label class="field-label" for="calcAvgMins">Average connected length</label>
+                <span id="calcAvgMinsValue" class="mono-metric">1.8 min avg</span>
+              </div>
+              <input id="calcAvgMins" type="range" min="0.5" max="5.0" step="0.1" value="1.8" />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="calcDaysMonth">Calling days per month</label>
+              <select id="calcDaysMonth" class="field-select">
+                <option value="22">22 business days</option>
+                <option value="25" selected>25 calling days</option>
+                <option value="30">30 days</option>
+              </select>
+            </div>
+
+            <div style="padding: 16px; border-radius: 6px; background: var(--bg); border: 1px solid var(--rule);">
+              <div class="caption-text">Estimated monthly usage: <strong id="calcMonthlyMins" class="mono-metric" style="color: var(--fg);">5,625 min/month</strong></div>
+              <div id="calcEstCost" class="plan-price" style="font-size: 1.5rem; margin-top: 6px;">&#8377;19,688 / mo + GST</div>
+              <div class="caption-text" style="margin-top: 6px;">Recommended tier: <span id="calcRecPlan" style="color: var(--fg);">Growth / Scale</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 8: Trust Summary -->
+    <section class="section section--raised">
+      <div class="container">
+        <div class="section-intro--split">
+          <div>
+            <h2 class="h1-title">Built for TRAI rules and DPDP transparency.</h2>
+            <p class="body-text" style="margin-top: 12px;">
+              Automated calling in India fails quickly without compliance discipline. Read our exact practices before launching any live number.
+            </p>
+          </div>
+          <a class="btn btn--secondary" href="/trust">Read Trust &amp; compliance</a>
+        </div>
+
+        <div class="trust-grid">
+          <div class="trust-item">
+            <h3 class="h3-title">Upfront AI disclosure</h3>
+            <p class="body-text" style="margin-top: 6px;">Agents state they are AI assistants in the opening greeting and confirm honestly if a listener asks directly.</p>
+          </div>
+          <div class="trust-item">
+            <h3 class="h3-title">Immediate opt-out hang-up</h3>
+            <p class="body-text" style="margin-top: 6px;">Requests like "take me off your list" or "do not call" trigger an immediate close and stop further prompts.</p>
+          </div>
+          <div class="trust-item">
+            <h3 class="h3-title">TRAI hours and DLT routing</h3>
+            <p class="body-text" style="margin-top: 6px;">Promotional outreach requires registered DLT entity headers, NCPR DND scrubbing, and 09:00 to 21:00 IST calling windows.</p>
+          </div>
+          <div class="trust-item">
+            <h3 class="h3-title">Documented sub-processors</h3>
+            <p class="body-text" style="margin-top: 6px;">Deepgram (STT/fallback TTS), Groq and Google (LLM), Smallest AI and Cartesia (TTS), plus your chosen Indian telephony trunk.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 9: Product-Specific FAQ -->
+    <section class="section" id="faq">
+      <div class="container flow-split">
+        <div class="flow-split__aside">
+          <h2 class="h1-title">Common buyer questions.</h2>
+          <p class="body-text" style="margin-top: 12px;">
+            Straight answers on voice quality, legal compliance, DND scrubbing, and per-minute billing.
+          </p>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary>Does it sound robotic on Indian phone lines?</summary>
+            <div class="faq-item__body">No. Archie and Aria run on low-latency Indian English voice models tuned for local names and business phrasing. Audition any voice card above or test live in the <a href="/demo">browser demo</a>.</div>
+          </details>
+          <details class="faq-item">
+            <summary>Will listeners know they are speaking with an AI?</summary>
+            <div class="faq-item__body">Yes. Our standard opening greeting identifies the caller as an AI assistant from the start, and our system rules forbid claiming to be human.</div>
+          </details>
+          <details class="faq-item">
+            <summary>Which languages work today?</summary>
+            <div class="faq-item__body">Indian English (`en-IN`) is active and tested end to end across live WebSocket calls. Hindi and Telugu remain in beta planning and will only appear once fully verified.</div>
+          </details>
+          <details class="faq-item">
+            <summary>How do you handle DND numbers and TRAI compliance?</summary>
+            <div class="faq-item__body">Promotional campaigns require your DLT registration, 140/160 series routing through your telephony provider, DND list scrubbing before dialling, and calling hours locked to 09:00 to 21:00 IST.</div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I bring my own phone number or SIP trunk?</summary>
+            <div class="faq-item__body">Yes. Vaakora supports Exotel, Plivo, Twilio, Vobiz SIP trunks, and hardware GoIP GSM SIM gateways inside the SIMs tab.</div>
+          </details>
+          <details class="faq-item">
+            <summary>What happens if a prospect asks a lengthy or off-script question?</summary>
+            <div class="faq-item__body">SmartTurn end-of-turn detection waits through natural breathing pauses so slow speakers are not cut off mid-sentence, and the agent answers multi-part questions directly from your knowledge base before pitching next steps.</div>
+          </details>
+          <details class="faq-item">
+            <summary>How is talk time billed?</summary>
+            <div class="faq-item__body">Talk time is billed per second, rounded up to the nearest 6-second pulse on connected calls. Unanswered browser or ring-only tests consume zero call minutes.</div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I test my exact script before calling real prospects?</summary>
+            <div class="faq-item__body">Yes. Configure your business pitch and instructions inside the <a href="/app">console</a> and speak with your agent in the browser sandbox until you are satisfied.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 10: Final CTA Band -->
+    <section class="section">
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <h2 class="h2-title">Hear Archie handle your toughest sales objection live.</h2>
+            <p class="body-text" style="margin-top: 8px;">Test a 3-minute voice call in your browser right now, or ask our Hyderabad team for a pilot walkthrough.</p>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+            <a class="btn btn--primary" href="/demo">Talk to Archie</a>
+            <a class="btn btn--secondary" href="/trust#contact">Contact team</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a class="brand-link" href="/" style="padding-top: 0;">
+            <img src="/static/brand/logo-mark.svg" alt="" role="presentation" width="24" height="24" />
+            <span class="brand-wordmark">Vaakora</span>
+          </a>
+          <p class="caption-text" style="margin-top: 10px; max-width: 30ch;">
+            Indian English AI voice agents for SMBs and media studios. Built in Hyderabad, India; configured demo showcases client Pontis LLP.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/demo">Talk to Archie (Live Demo)</a></li>
+            <li><a href="/voices">Voice Personas</a></li>
+            <li><a href="/pricing">Pricing &amp; Calculator</a></li>
+            <li><a href="/app">Operator Console</a></li>
+            <li><a href="/simulator">Engine Sandbox</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>Compliance &amp; Company</h3>
+          <ul>
+            <li><a href="/trust">Trust &amp; TRAI Compliance</a></li>
+            <li><a href="/trust#subprocessors">Sub-processors</a></li>
+            <li><a href="/trust#contact">Contact Hyderabad Team</a></li>
+            <li><a href="/llms.txt">llms.txt</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/legal/terms">Terms of Service</a></li>
+            <li><a href="/legal/privacy">Privacy Policy</a></li>
+            <li><a href="/legal/acceptable-use">Acceptable Use Policy</a></li>
+            <li><a href="/legal/refunds">Refund Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-legal">
+        <span>Copyright Vaakora, Hyderabad. Grievance Officer: <a href="mailto:grievance@vaakora.in">grievance@vaakora.in</a></span>
+        <div class="footer-legal__links">
+          <a href="/legal/terms">Terms</a>
+          <a href="/legal/privacy">Privacy</a>
+          <a href="/legal/acceptable-use">Acceptable use</a>
+          <a href="/legal/refunds">Refunds</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

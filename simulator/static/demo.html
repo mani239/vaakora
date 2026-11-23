@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en" data-surface="paper">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Talk to Archie (Live Browser Demo) | Vaakora</title>
+  <meta name="description" content="Speak live with Archie or other Vaakora Indian voice agents directly in your browser. Configured for client Pontis LLP, capped at 3 minutes." />
+  <link rel="canonical" href="https://vaakora.in/demo" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta property="og:title" content="Talk to Archie (Live Browser Demo) | Vaakora" />
+  <meta property="og:description" content="Speak live with Archie or other Vaakora Indian voice agents in your browser with automatic lead scoring." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://vaakora.in/demo" />
+  <meta property="og:image" content="https://vaakora.in/static/brand/og-card.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Talk to Archie (Live Browser Demo) | Vaakora" />
+  <meta name="twitter:description" content="Test real-time interruption handling, 16kHz audio streaming, and post-call scoring directly in your browser." />
+  <meta name="twitter:image" content="https://vaakora.in/static/brand/og-card.svg" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "Vaakora",
+        "url": "https://vaakora.in/",
+        "logo": "https://vaakora.in/static/brand/logo-mark.svg"
+      },
+      {
+        "@type": "WebApplication",
+        "name": "Vaakora Live Browser Voice Demo",
+        "url": "https://vaakora.in/demo",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "description": "Browser WebSocket voice demo powered by Vaakora where visitors speak live with Archie calling on behalf of client Pontis LLP.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "INR"
+        }
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@100..112.5,400..600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/callingout-tokens.css" />
+  <link rel="stylesheet" href="/static/css/callingout-marketing.css" />
+  <link rel="stylesheet" href="/static/css/callingout-console.css" />
+  <script src="/static/outpero-client.js"></script>
+  <script src="/static/js/callingout-site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand-link" href="/" aria-label="Vaakora Home">
+        <img src="/static/brand/logo-mark.svg" alt="" role="presentation" width="24" height="24" />
+        <span class="brand-wordmark">Vaakora</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="site-nav__link" href="/">Home</a>
+        <a class="site-nav__link" href="/voices">Voices</a>
+        <a class="site-nav__link" href="/pricing">Pricing</a>
+        <a class="site-nav__link" href="/trust">Trust &amp; compliance</a>
+        <a class="site-nav__link" href="/simulator">Sandbox</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn--ghost btn--sm header-console-link" href="/app">Open console</a>
+        <button type="button" id="mobileMenuTrigger" class="mobile-menu-trigger" aria-expanded="false" aria-controls="mobileMenuSheet">Menu</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="mobileMenuSheet" class="mobile-sheet" role="dialog" aria-modal="true" aria-label="Mobile navigation" hidden>
+    <div class="mobile-sheet__top">
+      <a class="brand-link" href="/"><img src="/static/brand/logo-mark.svg" alt="" role="presentation" width="24" height="24" /><span class="brand-wordmark">Vaakora</span></a>
+      <button type="button" id="mobileMenuClose" class="btn btn--secondary btn--sm">Close</button>
+    </div>
+    <nav class="mobile-sheet__nav" aria-label="Mobile links">
+      <a href="/">Home</a>
+      <a href="/voices">Voices</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/trust">Trust &amp; compliance</a>
+      <a href="/app">Open console</a>
+    </nav>
+  </div>
+
+  <main id="main-content">
+    <section class="section section--first">
+      <div class="container">
+        <div class="section-intro" style="margin-bottom: 24px;">
+          <h1 class="h1-title">Talk to Archie in your browser.</h1>
+          <p class="body-text" style="margin-top: 8px;">
+            Choose a voice and roleplay scenario below, then speak naturally into your microphone or interrupt mid-sentence. Calls open with an AI disclosure and end with a scored summary.
+          </p>
+          <p class="caption-text" style="margin-top: 6px; color: var(--fg-2);">
+            Live demo configured for active client: Pontis LLP (Hyderabad, AI dubbing and video localization).
+          </p>
+        </div>
+
+        <div class="pricing-split">
+          <!-- Setup & Controls -->
+          <div class="card" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="field-group">
+              <label class="field-label" for="demoVoiceSelect">Voice persona</label>
+              <select id="demoVoiceSelect" class="field-select">
+                <option value="archie" selected>Archie (B2B sales, Indian English, male)</option>
+                <option value="aria">Aria (Studio outreach, Indian English, female)</option>
+                <option value="kiefer">Kiefer (Agency demos, Indian English, male)</option>
+                <option value="katie">Katie (Admissions &amp; follow-ups, Indian English, female)</option>
+                <option value="gemma">Gemma (Executive &amp; OTT, English, female)</option>
+                <option value="daniel">Daniel (Operations &amp; lending, Indian English, male)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="demoScenarioSelect">Roleplay scenario</label>
+              <select id="demoScenarioSelect" class="field-select">
+                <option value="microdrama_producer" selected>Studio head asked about AI dubbing &amp; vertical shorts</option>
+                <option value="edtech_scorm">L&amp;D lead localizing corporate SCORM training courses</option>
+                <option value="ott_film_dubbing">OTT executive testing lip-sync quality &amp; pricing</option>
+                <option value="ad_agency_reels">Agency director adapting TV commercials in 24 hours</option>
+              </select>
+            </div>
+
+            <div class="notice-box" style="font-size: 0.875rem;">
+              We record demo calls to check transcript quality and delete recordings after 30 days. Public browser sessions allow up to 3 calls per day at 3 minutes each.
+            </div>
+
+            <div id="demoMicErrorBox" class="notice-box notice-box--error" hidden>
+              <strong>Microphone access blocked.</strong> Click the lock or microphone icon in your browser address bar, allow microphone permission for this site, and press Try again.
+              <div style="margin-top: 10px;">
+                <button type="button" id="demoRetryMicBtn" class="btn btn--secondary btn--sm">Try again</button>
+              </div>
+            </div>
+
+            <div id="demoErrorBox" class="notice-box notice-box--error" role="alert" hidden></div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+              <button type="button" id="demoStartBtn" class="btn btn--primary">Start live call</button>
+              <button type="button" id="demoMuteBtn" class="btn btn--secondary" disabled aria-pressed="false">Mute mic</button>
+              <button type="button" id="demoHangupBtn" class="c-btn c-btn--danger" data-surface="obsidian" disabled style="min-height: 44px; padding: 0 18px;">Hang up</button>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; color: var(--fg-3); margin-bottom: 6px;">
+                <span>Microphone input level</span>
+                <span id="demoMicLevelText" class="mono-metric">0%</span>
+              </div>
+              <div class="meter-track" data-surface="obsidian">
+                <div id="demoMicBar" class="meter-fill"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Obsidian Live Call Stage -->
+          <div id="demoCallStage" class="console-shot" data-surface="obsidian" style="display: flex; flex-direction: column;">
+            <div class="console-shot__bar">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span id="demoStatusDot" class="status-dot"></span>
+                <span id="demoStatusText" style="font-weight: 600; font-size: 0.9375rem;">Ready to call</span>
+                <span id="demoSpeakerPill" class="state-badge">Idle</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span id="demoTimerText" class="mono-metric" style="color: var(--fg-2);">00:00 / 03:00</span>
+                <button type="button" id="demoMetricsToggle" class="call-strip__play" aria-expanded="false">Show engine details</button>
+              </div>
+            </div>
+
+            <div id="demoMetricsBar" class="demo-metrics-bar" hidden>
+              <span>STT: <strong id="demoStatStt" class="mono-metric" style="color: var(--fg);">N/A</strong></span>
+              <span>LLM: <strong id="demoStatLlm" class="mono-metric" style="color: var(--fg);">N/A</strong></span>
+              <span>Turnaround: <strong id="demoStatTotal" class="mono-metric" style="color: var(--fg);">N/A</strong></span>
+            </div>
+
+            <div id="demoTranscriptStream" class="transcript-stream" style="flex: 1; border: 0; border-radius: 0; min-height: 320px; max-height: 400px;">
+              <div style="margin: auto; text-align: center; color: var(--fg-3); font-size: 0.9375rem; max-width: 36ch;">
+                Click <strong>Start live call</strong> to connect. When the voice greets you, ask any pricing, language, or studio question.
+              </div>
+            </div>
+
+            <div id="demoInterimLine" style="padding: 6px 16px; font-size: 0.8125rem; color: var(--fg-3); border-top: 1px solid var(--rule); min-height: 30px;"></div>
+
+            <form id="demoTextForm" style="display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--rule); background: var(--bg-raised);">
+              <label class="sr-only" for="demoTextInput">Type a reply if you prefer text</label>
+              <input id="demoTextInput" type="text" class="c-input" placeholder="Prefer typing? Send a test reply during a call..." disabled />
+              <button id="demoTextSendBtn" type="submit" class="c-btn c-btn--primary" disabled>Send</button>
+            </form>
+          </div>
+        </div>
+
+        <section class="card" style="margin-top: 24px;" aria-label="Demo session details">
+          <h2 class="h2-title">What to test in this 3-minute live browser demo</h2>
+          <p class="body-text" style="margin-top: 6px;">
+            Your microphone streams directly to the Vaakora FastAPI and Pipecat pipeline over binary WebSockets so you can evaluate real conversation pacing before connecting telephony trunks.
+          </p>
+          <ul class="check-list" style="margin-top: 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px 24px;">
+            <li>Real-time 16kHz PCM audio streaming with live barge-in interruption handling</li>
+            <li>Up to 180 seconds per call and 3 free public demo sessions per day from your browser</li>
+            <li>Mid-call latency inspector showing live STT, LLM, and response turnaround timings</li>
+            <li>Automatic post-call summary returning lead role, need, next step, and 0 to 100 score</li>
+          </ul>
+        </section>
+
+        <!-- Post-Call Summary Card -->
+        <section id="demoReportCard" class="card" style="margin-top: 24px;" hidden>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--rule);">
+            <div>
+              <h2 class="h2-title">Call summary &amp; lead score</h2>
+              <p class="caption-text">Generated automatically after your call ended.</p>
+            </div>
+            <span id="demoReportBadge" class="outcome-tag" data-surface="obsidian">WARM</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 16px;">
+            <div>
+              <div class="caption-text">Detected role</div>
+              <div id="demoRepRole" style="font-weight: 600; margin-top: 4px;">N/A</div>
+            </div>
+            <div>
+              <div class="caption-text">Identified need</div>
+              <div id="demoRepNeed" style="font-weight: 600; margin-top: 4px;">N/A</div>
+            </div>
+            <div>
+              <div class="caption-text">Agreed next step</div>
+              <div id="demoRepNext" style="font-weight: 600; margin-top: 4px;">N/A</div>
+            </div>
+          </div>
+          <p id="demoRepSummary" class="body-text" style="margin-top: 14px;"></p>
+
+          <div class="cta-band" style="margin-top: 20px; padding: 18px;">
+            <div>
+              <h3 class="h3-title">Want Archie calling your leads?</h3>
+              <p class="caption-text" style="margin-top: 4px;">Start with 30 free browser minutes or upload a CSV in the console.</p>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <a class="btn btn--primary btn--sm" href="/app">Open console</a>
+              <a class="btn btn--secondary btn--sm" href="/pricing">See pricing</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+      var params = new URLSearchParams(window.location.search);
+      var preSpeaker = (params.get('speaker') || '').toLowerCase();
+      var voiceSelect = document.getElementById('demoVoiceSelect');
+      if (preSpeaker && voiceSelect) {
+        for (var i = 0; i < voiceSelect.options.length; i++) {
+          if (voiceSelect.options[i].value === preSpeaker) {
+            voiceSelect.value = preSpeaker;
+            break;
+          }
+        }
+      }
+
+      var customWsUrl = '';
+      fetch('/api/config')
+        .then(function (r) { return r.json(); })
+        .then(function (d) { customWsUrl = (d && d.engine_ws_url) || ''; })
+        .catch(function () {});
+
+      var startBtn = document.getElementById('demoStartBtn');
+      var muteBtn = document.getElementById('demoMuteBtn');
+      var hangupBtn = document.getElementById('demoHangupBtn');
+      var retryMicBtn = document.getElementById('demoRetryMicBtn');
+      var metricsToggle = document.getElementById('demoMetricsToggle');
+      var metricsBar = document.getElementById('demoMetricsBar');
+      var micErrorBox = document.getElementById('demoMicErrorBox');
+      var errorBox = document.getElementById('demoErrorBox');
+      var streamBox = document.getElementById('demoTranscriptStream');
+      var statusDot = document.getElementById('demoStatusDot');
+      var statusText = document.getElementById('demoStatusText');
+      var speakerPill = document.getElementById('demoSpeakerPill');
+      var timerText = document.getElementById('demoTimerText');
+      var textForm = document.getElementById('demoTextForm');
+      var textInput = document.getElementById('demoTextInput');
+      var textSendBtn = document.getElementById('demoTextSendBtn');
+      var interimEl = document.getElementById('demoInterimLine');
+      var reportCard = document.getElementById('demoReportCard');
+      var micBar = document.getElementById('demoMicBar');
+      var micText = document.getElementById('demoMicLevelText');
+
+      var client = null;
+      var callActive = false;
+      var activeAgentEl = null;
+      var timerInterval = null;
+      var startedAt = 0;
+
+      function fmtTime(sec) {
+        var m = Math.floor(sec / 60);
+        var s = sec % 60;
+        return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+      }
+
+      function setUiCalling(active) {
+        callActive = active;
+        startBtn.disabled = active;
+        muteBtn.disabled = !active;
+        hangupBtn.disabled = !active;
+        textInput.disabled = !active;
+        textSendBtn.disabled = !active;
+        voiceSelect.disabled = active;
+        document.getElementById('demoScenarioSelect').disabled = active;
+
+        if (active) {
+          statusDot.className = 'status-dot status-dot--live is-pulsing';
+          statusText.textContent = 'Connected live';
+          startedAt = Date.now();
+          timerInterval = setInterval(function () {
+            var elapsed = Math.floor((Date.now() - startedAt) / 1000);
+            timerText.textContent = fmtTime(elapsed) + ' / 03:00';
+          }, 1000);
+        } else {
+          statusDot.className = 'status-dot';
+          statusText.textContent = 'Call ended';
+          speakerPill.textContent = 'Idle';
+          speakerPill.className = 'state-badge';
+          muteBtn.setAttribute('aria-pressed', 'false');
+          muteBtn.textContent = 'Mute mic';
+          if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
+          if (micBar) micBar.style.width = '0%';
+          if (micText) micText.textContent = '0%';
+        }
+      }
+
+      function clearPlaceholder() {
+        if (streamBox.innerText.indexOf('Click Start live call') !== -1) {
+          streamBox.innerHTML = '';
+        }
+      }
+
+      function appendTurn(role, text, metaText) {
+        clearPlaceholder();
+        var wrap = document.createElement('div');
+        wrap.className = 'turn-bubble ' + (role === 'agent' ? 'turn-bubble--agent' : 'turn-bubble--lead');
+        var head = document.createElement('div');
+        head.className = 'turn-bubble__head';
+        var who = document.createElement('span');
+        who.textContent = role === 'agent' ? voiceSelect.value.toUpperCase() : 'YOU';
+        var meta = document.createElement('span');
+        meta.textContent = metaText || '';
+        head.appendChild(who);
+        head.appendChild(meta);
+        var body = document.createElement('div');
+        body.textContent = text;
+        wrap.appendChild(head);
+        wrap.appendChild(body);
+        streamBox.appendChild(wrap);
+        streamBox.scrollTop = streamBox.scrollHeight;
+        return body;
+      }
+
+      metricsToggle.addEventListener('click', function () {
+        var next = metricsBar.hidden;
+        metricsBar.hidden = !next;
+        metricsToggle.setAttribute('aria-expanded', next ? 'true' : 'false');
+        metricsToggle.textContent = next ? 'Hide engine details' : 'Show engine details';
+      });
+
+      function beginDemoCall() {
+        micErrorBox.hidden = true;
+        errorBox.hidden = true;
+        reportCard.hidden = true;
+        streamBox.innerHTML = '';
+        activeAgentEl = null;
+        timerText.textContent = '00:00 / 03:00';
+        statusDot.className = 'status-dot status-dot--warn';
+        statusText.textContent = 'Connecting...';
+
+        client = new OutperoVoiceClient({
+          onConnected: function () {
+            setUiCalling(true);
+          },
+          onMicError: function () {
+            micErrorBox.hidden = false;
+            if (client) client.forceClose();
+            setUiCalling(false);
+          },
+          onMicLevel: function (rms) {
+            var pct = Math.min(100, Math.round(rms * 420));
+            micBar.style.width = pct + '%';
+            micText.textContent = pct + '%';
+          },
+          onBotSpeaking: function (speaking) {
+            if (!callActive) return;
+            speakerPill.textContent = speaking ? 'Agent speaking' : 'Listening';
+            speakerPill.className = speaking ? 'state-badge state-badge--live' : 'state-badge';
+          },
+          onUserSpeaking: function (speaking) {
+            if (!callActive) return;
+            if (speaking) {
+              speakerPill.textContent = 'You are speaking';
+              speakerPill.className = 'state-badge state-badge--warn';
+            }
+          },
+          onUserInterim: function (txt) {
+            interimEl.textContent = txt ? ('Hearing: ' + txt) : '';
+          },
+          onUserTranscript: function (msg) {
+            interimEl.textContent = '';
+            activeAgentEl = null;
+            var meta = msg.stt_ms ? ('STT ' + msg.stt_ms + ' ms') : '';
+            appendTurn('lead', msg.text || '', meta);
+          },
+          onAgentTextDelta: function (msg) {
+            if (!activeAgentEl) {
+              activeAgentEl = appendTurn('agent', msg.text || '', '');
+            } else {
+              activeAgentEl.textContent += (msg.text || '');
+            }
+            streamBox.scrollTop = streamBox.scrollHeight;
+          },
+          onAgentText: function (msg) {
+            if (!activeAgentEl) {
+              activeAgentEl = appendTurn('agent', msg.text || '', '');
+            } else {
+              activeAgentEl.textContent = msg.text || activeAgentEl.textContent;
+            }
+            activeAgentEl = null;
+          },
+          onMetrics: function (msg) {
+            if (msg.stt_ms) document.getElementById('demoStatStt').textContent = msg.stt_ms + ' ms';
+            if (msg.llm_ms) document.getElementById('demoStatLlm').textContent = msg.llm_ms + ' ms';
+          },
+          onTurnLatency: function (msg) {
+            if (msg.total_ms) document.getElementById('demoStatTotal').textContent = msg.total_ms + ' ms';
+          },
+          onCallReport: function (rep) {
+            if (!rep) return;
+            reportCard.hidden = false;
+            var tier = rep.qualification_status || 'WARM';
+            var score = rep.score !== undefined ? (' (score ' + rep.score + ')') : '';
+            document.getElementById('demoReportBadge').textContent = tier + score;
+            document.getElementById('demoRepRole').textContent = rep.decision_maker_role || 'Not captured';
+            document.getElementById('demoRepNeed').textContent = rep.identified_need || 'General inquiry';
+            document.getElementById('demoRepNext').textContent = rep.agreed_next_step || 'Follow up by email or WhatsApp';
+            document.getElementById('demoRepSummary').textContent = rep.executive_summary || '';
+          },
+          onError: function (msg) {
+            errorBox.textContent = (msg || 'Connection issue.') + ' Click Start live call to try again.';
+            errorBox.hidden = false;
+          },
+          onClosed: function () {
+            setUiCalling(false);
+          }
+        });
+
+        client.start({
+          speaker: voiceSelect.value,
+          genre: document.getElementById('demoScenarioSelect').value,
+          llm: 'auto',
+          demo: true
+        }, customWsUrl);
+      }
+
+      startBtn.addEventListener('click', beginDemoCall);
+      retryMicBtn.addEventListener('click', beginDemoCall);
+
+      muteBtn.addEventListener('click', function () {
+        if (!client || !callActive) return;
+        var nextMuted = !client.isMuted;
+        client.setMuted(nextMuted);
+        muteBtn.setAttribute('aria-pressed', nextMuted ? 'true' : 'false');
+        muteBtn.textContent = nextMuted ? 'Unmute mic' : 'Mute mic';
+      });
+
+      hangupBtn.addEventListener('click', function () {
+        if (!client || !callActive) return;
+        statusText.textContent = 'Generating report...';
+        client.endCall();
+      });
+
+      textForm.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        if (!client || !callActive) return;
+        var txt = (textInput.value || '').trim();
+        if (!txt) return;
+        textInput.value = '';
+        client.sendText(txt);
+      });
+    })();
+  </script>
+</body>
+</html>

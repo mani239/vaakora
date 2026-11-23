@@ -1,0 +1,24 @@
+# Vaakora
+
+> Vaakora calls your leads in natural Indian English, answers their questions, and returns a transcript and lead score for every call. Built in Hyderabad, India. Live browser demo and sample workspace are configured for active client Pontis LLP (Hyderabad, AI dubbing and video localization).
+
+## Product Overview
+- Target audience: Indian SMBs and agencies handling 100 to 2,000 leads per day across real estate, admissions and coaching, insurance and lending DSAs, D2C brands, and media studios.
+- Live language support: Indian English (`en-IN`) today; additional Indian languages are planned only after full end-to-end testing.
+- Voice pipeline: FastAPI + Pipecat real-time audio engine on 16kHz binary WebSockets with Silero VAD, Deepgram Nova-3 STT, Groq / Gemini LLM, and Smallest AI Lightning v3.1 / Deepgram Aura-2 TTS.
+- Signature workflow: Instant browser demo with Archie (no signup required, running live Pontis LLP localization scenarios), live turn-by-turn Call Strip transcripts, 0 to 100 lead scoring (HOT, WARM, NURTURE, UNQUALIFIED), and CSV lead campaigns.
+
+## Public Pages
+- [Home](https://vaakora.in/): Product overview, playable Archie Call Strip (Pontis LLP sample), 6 voice previews, pricing teaser, compliance summary, and FAQ.
+- [Talk to Archie Live Demo](https://vaakora.in/demo): Full-screen browser voice call with Archie or other personas running active client Pontis LLP scripts (capped at 3 demo calls/IP/day and 3 minutes per call).
+- [Voices](https://vaakora.in/voices): Audition all 10 English calling personas across male and female business roles.
+- [Pricing](https://vaakora.in/pricing): Transparent INR plans (Trial Free 30 browser min, Starter Rs 4,999/mo for 1,000 min, Growth Rs 14,999/mo for 3,500 min, Scale Custom from Rs 3.50/min), billed per 6-second pulse.
+- [Trust & Compliance](https://vaakora.in/trust): TRAI TCCCPR DLT registration guidance, 140/160 series calling rules, DND scrubbing, 09:00 to 21:00 IST hours, AI identity disclosure, DPDP Act 2023 rights, sub-processors, and contact form.
+- [Operator Console](https://vaakora.in/app): Workspace console (pre-loaded with client workspace Pontis LLP) for managing SIMs/trunks, voice employees, lead queues, call logs, and live browser sandbox testing.
+
+## Legal & Governance
+- [Terms of Service](https://vaakora.in/legal/terms): Terms governing Vaakora usage, workspace billing, and customer responsibilities.
+- [Privacy Policy](https://vaakora.in/legal/privacy): Data collection, call recording retention, and DPDP Act 2023 user rights.
+- [Acceptable Use Policy](https://vaakora.in/legal/acceptable-use): Strict prohibitions against unconsented robocalls, debt harassment, and political spamming.
+- [Refund Policy](https://vaakora.in/legal/refunds): Wallet credit top-up and subscription refund rules.
+- Grievance Officer: Vaakora, Hyderabad (grievance@vaakora.in).
